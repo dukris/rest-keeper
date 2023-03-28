@@ -1,0 +1,47 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+#  minio:
+#    bucket: ${MINIO_DEFAULT_BUCKETS}
+#    access-key: ${MINIO_ROOT_USER}
+#    secret-key: ${MINIO_ROOT_PASSWORD}
+#    url: ${SPRING_MINIO_URL}
+#  jackson:
+#    default-property-inclusion: NON_NULL
+
+#springdoc:
+#  override-with-generic-response: false
+#  swagger-ui:
+#    path: ${sinder.context-path}/swagger-ui.html
+#    url: ${sinder.context-path}/v3/api-docs
+#    config-url: ${sinder.context-path}/v3/api-docs/swagger-config
+#    disable-swagger-default-url: true
+#  api-docs:
+#    path: ${sinder.context-path}/v3/api-docs
+
+#restkeeper:
+#  context-path: /sinder/v1
+#  security:
+#    access-key: ${RESTKEEPER_SECRETS_ACCESS-KEY}
+#    refresh-key: ${RESTKEEPER_SECRETS_REFRESH-KEY}
+#    enable-key: ${RESTKEEPER_SECRETS_ENABLE-KEY}
+#    password-refresh-key: ${RESTKEEPER_SECRETS_PASSWORD-REFRESH-KEY}
+#    access-expiration-time: ${RESTKEEPER_SECRETS_ACCESS-EXPIRATION-TIME}
+#    refresh-expiration-time: ${RESTKEEPER_SECRETS_REFRESH-EXPIRATION-TIME}
+#  mail:
+#    host: ${RESTKEEPER_MAIL_HOST}
+#    username: ${RESTKEEPER_MAIL_USERNAME}
+#    password: ${RESTKEEPER_MAIL_PASSWORD}
+#    port: ${RESTKEEPER_MAIL_PORT}
+#    protocol: ${RESTKEEPER_MAIL_PROTOCOL}
+
