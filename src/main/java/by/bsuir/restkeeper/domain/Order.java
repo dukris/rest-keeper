@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -21,15 +22,20 @@ public class Order {
     @Column(name = "table_number", nullable = false)
     private Long tableNumber;
 
-    @Column(nullable = false, length = 50)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "dish_id")
+    private Dish dish;
+
+    @Column(nullable = false)
+    private Integer amount;
 
     @Column(nullable = false)
     private BigDecimal cost;
 
     @Column(nullable = false)
-    private Integer amount;
+    private LocalDateTime time;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 

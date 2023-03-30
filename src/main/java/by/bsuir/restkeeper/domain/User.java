@@ -36,8 +36,12 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 100)
     private String password;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(nullable = false, length = 50)
+    private String passport;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
@@ -48,8 +52,9 @@ public class User implements UserDetails {
     @Column(name = "photo_path")
     private String photoPath;
 
-    @Column(nullable = false)
-    private Boolean enabled;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -80,7 +85,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 
     public enum Role {
