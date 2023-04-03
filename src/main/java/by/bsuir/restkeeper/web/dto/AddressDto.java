@@ -1,14 +1,17 @@
 package by.bsuir.restkeeper.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import by.bsuir.restkeeper.web.dto.group.OnCreate;
+import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
 public record AddressDto(
 
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @Null(groups = {OnCreate.class}, message = "Id should be blank!")
+        @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
         Long id,
 
         @NotBlank(message = "City can't be blank!")
