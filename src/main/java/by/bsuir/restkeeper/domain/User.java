@@ -56,6 +56,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Column(nullable = false)
+    private Boolean enabled;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -85,7 +88,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public enum Role {

@@ -22,10 +22,9 @@ public class Address {
     @Column(nullable = false, length = 50)
     private String street;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private Integer house;
 
-    @Column(length = 50)
     private Integer flat;
 
 }
