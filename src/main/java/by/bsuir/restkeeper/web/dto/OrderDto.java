@@ -2,17 +2,22 @@ package by.bsuir.restkeeper.web.dto;
 
 import by.bsuir.restkeeper.domain.Dish;
 import by.bsuir.restkeeper.domain.Order;
+import by.bsuir.restkeeper.web.dto.group.OnCreate;
+import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record OrderDto(
 
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @Null(groups = {OnCreate.class}, message = "Id should be blank!")
+        @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
         Long id,
 
         @NotNull(message = "Number of table can't be blank!")
@@ -20,19 +25,19 @@ public record OrderDto(
         Long tableNumber,
 
         @Valid
-        Dish dish,
+        List<Dish> dishes,
 
         @NotNull(message = "Amount can't be blank!")
         @Positive(message = "Amount must be positive!")
-        Integer amount,
+        List<Integer> amount,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         BigDecimal cost,
 
-        @NotNull(message = "Time can't be blank!")
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         LocalDateTime time,
 
-        @NotNull(message = "Status can't be blank!")
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         Order.Status status
 
 ) {

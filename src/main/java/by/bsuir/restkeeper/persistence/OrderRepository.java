@@ -8,9 +8,7 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findByTableNumber(Long tableNumber);
-
-    List<Order> findByTime(LocalDateTime time);
+    List<Order> findByTimeBetween(LocalDateTime from, LocalDateTime to);
 
     List<Order> findByStatus(Order.Status status);
 

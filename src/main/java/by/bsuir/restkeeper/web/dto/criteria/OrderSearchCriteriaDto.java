@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 public record OrderSearchCriteriaDto(
 
-        Long tableNumber,
-        LocalDateTime time,
+        LocalDateTime from,
+        LocalDateTime to,
         Order.Status status
 
 ) {

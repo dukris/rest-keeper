@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,12 +23,17 @@ public class Order {
     @Column(name = "table_number", nullable = false)
     private Long tableNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_id")
-    private Dish dish;
+    @ManyToMany
+    @JoinTable(
+            name = "orders_dishes",
+            joinColumns = {@JoinColumn(name = "order_id")},
+            inverseJoinColumns = {@JoinColumn(name = "dish_id")}
+    )
+    private List<Dish> dishes;
 
-    @Column(nullable = false)
-    private Integer amount;
+    @ElementCollection
+    @CollectionTable(name = "orders_amount", joinColumns = @JoinColumn(name = "order_id"))
+    private List<Integer> amount;
 
     @Column(nullable = false)
     private BigDecimal cost;

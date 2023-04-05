@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Data
 public class OrderSearchCriteria {
 
-    private Long tableNumber;
-    private LocalDateTime time;
+    private LocalDateTime from;
+    private LocalDateTime to;
     private Order.Status status;
 
 }

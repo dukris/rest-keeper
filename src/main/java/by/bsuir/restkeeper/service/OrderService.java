@@ -11,6 +11,8 @@ public interface OrderService {
 
     Order retrieveById(Long id);
 
+    Order changeStatus(Long id, Order.Status status);
+
     Order create(Order order);
 
     Order update(Order order);
