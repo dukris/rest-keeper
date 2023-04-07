@@ -33,7 +33,7 @@ public class DishController {
     private final DishMapper dishMapper;
     private final DishSearchCriteriaMapper dishSearchCriteriaMapper;
 
-    @GetMapping
+    @GetMapping //get dishes by availability
     public List<DishDto> getAllByCriteria(DishSearchCriteriaDto criteriaDto) {
         DishSearchCriteria criteria = dishSearchCriteriaMapper.toEntity(criteriaDto);
         List<Dish> dishes = dishService.retrieveAllByCriteria(criteria);
