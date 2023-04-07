@@ -92,4 +92,5 @@ public class UserServiceImpl implements UserService {
         user.setPhotoPath(path);
         userRepository.save(user);
     }
+
 }

@@ -34,7 +34,7 @@ public class OrderController {
     private final OrderMapper orderMapper;
     private final OrderSearchCriteriaMapper orderSearchCriteriaMapper;
 
-    @GetMapping //statistics: lest of orders by period of time, by status
+    @GetMapping //statistics: list of orders by period of time, by status
     public List<OrderDto> getAllByCriteria(OrderSearchCriteriaDto criteriaDto) {
         OrderSearchCriteria criteria = orderSearchCriteriaMapper.toEntity(criteriaDto);
         List<Order> orders = orderService.retrieveAllByCriteria(criteria);
