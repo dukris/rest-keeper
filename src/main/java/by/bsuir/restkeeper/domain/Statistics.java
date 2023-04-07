@@ -11,8 +11,8 @@ public class Statistics {
     private BigDecimal monthlyRevenue;
     private BigDecimal averageBill;
     private Integer dailyAmountOfGuests;
-    private Integer morningAmountOfGuests;
-    private Integer eveningAmountOfGuests;
+    private Integer firstHalfAmountOfGuests;
+    private Integer lastHalfAmountOfGuests;
     private Dish dailyDish;
 
 }
