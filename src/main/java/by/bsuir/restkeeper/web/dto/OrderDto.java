@@ -2,6 +2,7 @@ package by.bsuir.restkeeper.web.dto;
 
 import by.bsuir.restkeeper.domain.Dish;
 import by.bsuir.restkeeper.domain.Order;
+import by.bsuir.restkeeper.domain.User;
 import by.bsuir.restkeeper.web.dto.group.OnCreate;
 import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +13,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 public record OrderDto(
 
@@ -22,14 +23,14 @@ public record OrderDto(
 
         @NotNull(message = "Number of table can't be blank!")
         @Positive(message = "Number of table must be positive!")
-        Long tableNumber,
+        Integer tableNumber,
+
+        @NotNull(message = "Number of table can't be blank!")
+        @Positive(message = "Number of table must be positive!")
+        Integer amountOfGuests,
 
         @Valid
-        List<Dish> dishes,
-
-        @NotNull(message = "Amount can't be blank!")
-        @Positive(message = "Amount must be positive!")
-        List<Integer> amount,
+        Map<Dish, Integer> dishAmountMap,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         BigDecimal cost,
@@ -38,7 +39,10 @@ public record OrderDto(
         LocalDateTime time,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        Order.Status status
+        Order.Status status,
+
+        @Valid
+        User user
 
 ) {
 }

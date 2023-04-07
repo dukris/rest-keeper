@@ -2,11 +2,14 @@ package by.bsuir.restkeeper.web.dto;
 
 import by.bsuir.restkeeper.domain.Address;
 import by.bsuir.restkeeper.domain.User;
+import by.bsuir.restkeeper.web.dto.group.OnCreate;
+import by.bsuir.restkeeper.web.dto.group.OnCreateOrder;
 import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
@@ -14,7 +17,8 @@ import java.time.LocalDate;
 
 public record UserDto(
 
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @Null(groups = {OnCreate.class}, message = "Id should be blank!")
+        @NotNull(groups = {OnUpdate.class, OnCreateOrder.class}, message = "Id can't be blank!")
         Long id,
 
         @NotBlank(groups = {OnUpdate.class}, message = "Name can't be blank!")

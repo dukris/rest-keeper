@@ -34,11 +34,11 @@ public class OrderController {
     private final OrderMapper orderMapper;
     private final OrderSearchCriteriaMapper orderSearchCriteriaMapper;
 
-    @GetMapping
+    @GetMapping //statistics: lest of orders by period of time, by status
     public List<OrderDto> getAllByCriteria(OrderSearchCriteriaDto criteriaDto) {
         OrderSearchCriteria criteria = orderSearchCriteriaMapper.toEntity(criteriaDto);
         List<Order> orders = orderService.retrieveAllByCriteria(criteria);
-        return orderMapper.toDto(orders); //exception with enum: validation (dto), check valid data
+        return orderMapper.toDto(orders);
     }
 
     @GetMapping("/{id}")
@@ -47,25 +47,34 @@ public class OrderController {
         return orderMapper.toDto(order);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}") //change status only
     public OrderDto changeStatus(@PathVariable Long id,
                                  @RequestParam Order.Status status) {
         Order order = orderService.changeStatus(id, status);
         return orderMapper.toDto(order);
     }
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED) //todo create without lists, add endpoint to add dish to list
+    @PostMapping() //create order with tableNumber, guests and userId: set time, status
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderDto create(@Validated(OnCreate.class) @RequestBody OrderDto orderDto) {
         Order order = orderMapper.toEntity(orderDto);
         order = orderService.create(order);
         return orderMapper.toDto(order);
     }
 
-    @PutMapping("/{id}")
-    public OrderDto update(@Validated(OnUpdate.class) @RequestBody OrderDto orderDto) {
+    @PostMapping("/{orderId}/dishes/{dishId}") //add dishes
+    public OrderDto addDish(@PathVariable Long orderId,
+                            @PathVariable Long dishId,
+                            @RequestParam Integer amount) {
+        Order order = orderService.addDish(orderId, dishId, amount);
+        return orderMapper.toDto(order);
+    }
+
+
+    @PutMapping("/{id}") //submit order: set cost
+    public OrderDto submit(@Validated(OnUpdate.class) @RequestBody OrderDto orderDto) {
         Order order = orderMapper.toEntity(orderDto);
-        order = orderService.update(order);
+        order = orderService.submit(order);
         return orderMapper.toDto(order);
     }
 

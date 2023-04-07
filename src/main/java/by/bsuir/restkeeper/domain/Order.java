@@ -1,13 +1,27 @@
 package by.bsuir.restkeeper.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.MapKeyEnumerated;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -21,19 +35,19 @@ public class Order {
     private Long id;
 
     @Column(name = "table_number", nullable = false)
-    private Long tableNumber;
+    private Integer tableNumber;
 
-    @ManyToMany
-    @JoinTable(
-            name = "orders_dishes",
-            joinColumns = {@JoinColumn(name = "order_id")},
-            inverseJoinColumns = {@JoinColumn(name = "dish_id")}
-    )
-    private List<Dish> dishes;
+    @Column(name = "guests", nullable = false)
+    private Integer amountOfGuests;
 
     @ElementCollection
-    @CollectionTable(name = "orders_amount", joinColumns = @JoinColumn(name = "order_id"))
-    private List<Integer> amount;
+    @CollectionTable(name = "orders_dished",
+            foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "order_dish_amount"),
+            joinColumns = @JoinColumn(name = "order_id"))
+    @MapKeyColumn(name = "dish")
+    @MapKeyEnumerated(EnumType.STRING)
+    @Column(name = "dish_amount", nullable = false)
+    private Map<Dish, Integer> dishAmountMap;
 
     @Column(nullable = false)
     private BigDecimal cost;
@@ -44,6 +58,10 @@ public class Order {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public enum Status {
 

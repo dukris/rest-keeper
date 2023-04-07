@@ -15,7 +15,9 @@ public interface OrderService {
 
     Order create(Order order);
 
-    Order update(Order order);
+    Order submit(Order order);
+
+    Order addDish(Long orderId, Long dishId, Integer number);
 
     void delete(Long id);
 

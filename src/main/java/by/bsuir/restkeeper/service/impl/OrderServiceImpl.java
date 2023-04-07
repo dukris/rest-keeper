@@ -5,28 +5,42 @@ import by.bsuir.restkeeper.domain.Order;
 import by.bsuir.restkeeper.domain.criteria.OrderSearchCriteria;
 import by.bsuir.restkeeper.domain.exception.ResourceNotFoundException;
 import by.bsuir.restkeeper.persistence.OrderRepository;
+import by.bsuir.restkeeper.service.DishService;
 import by.bsuir.restkeeper.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.StreamUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final DishService dishService;
 
     @Override
     public List<Order> retrieveAllByCriteria(OrderSearchCriteria orderSearchCriteria) {
-        return orderSearchCriteria.getFrom() != null && orderSearchCriteria.getTo() != null ?
-                orderRepository.findByTimeBetween(orderSearchCriteria.getFrom(), orderSearchCriteria.getTo()) :
-                orderSearchCriteria.getStatus() != null ?
-                        orderRepository.findByStatus(orderSearchCriteria.getStatus()) :
-                        orderRepository.findAll();
+        if (orderSearchCriteria.getFrom() != null &&
+                orderSearchCriteria.getTo() != null &&
+                orderSearchCriteria.getStatus() != null) {
+            return orderRepository.findByStatusAndTimeBetween(
+                    orderSearchCriteria.getStatus(),
+                    orderSearchCriteria.getFrom(),
+                    orderSearchCriteria.getTo());
+        }
+        if (orderSearchCriteria.getFrom() != null && orderSearchCriteria.getTo() != null) {
+            return orderRepository.findByTimeBetween(orderSearchCriteria.getFrom(), orderSearchCriteria.getTo());
+        }
+        if (orderSearchCriteria.getStatus() != null) {
+            return orderRepository.findByStatus(orderSearchCriteria.getStatus());
+        } else {
+            return orderRepository.findAll();
+        }
     }
 
     @Override
@@ -45,21 +59,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(Order order) {
+        order.setDishAmountMap(new HashMap<>());
         order.setStatus(Order.Status.RECEIVED);
-        order.setCost(calculateTotalCost(order.getDishes(), order.getAmount()));
         order.setTime(LocalDateTime.now());
         return orderRepository.save(order);
     }
 
     @Override
-    public Order update(Order order) {
+    public Order submit(Order order) {
         Order foundOrder = retrieveById(order.getId());
-        foundOrder.setTableNumber(order.getTableNumber());
-        foundOrder.setDishes(order.getDishes());
-        foundOrder.setAmount(order.getAmount());
-        foundOrder.setCost(calculateTotalCost(order.getDishes(), order.getAmount()));
-        foundOrder.setStatus(order.getStatus());
+        foundOrder.setCost(calculateTotalCost(order.getDishAmountMap()));
         return orderRepository.save(foundOrder);
+    }
+
+    @Override
+    public Order addDish(Long orderId, Long dishId, Integer number) {
+        Order order = retrieveById(orderId);
+        Dish dish = dishService.retrieveById(dishId);
+        Map<Dish, Integer> dishAmountMap = order.getDishAmountMap();
+        dishAmountMap.put(dish, number);
+        order.setDishAmountMap(dishAmountMap);
+        return orderRepository.save(order);
     }
 
     @Override
@@ -67,14 +87,14 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.deleteById(id);
     }
 
-    private BigDecimal calculateTotalCost(List<Dish> dishes, List<Integer> amount) {
-        return StreamUtils.zip(dishes.stream(), amount.stream(),
-                (dish, number) -> {
-                    BigDecimal sum = new BigDecimal(number);
-                    sum = sum.multiply(dish.getPrice());
-                    return sum;
-                }
-        ).reduce(BigDecimal.ZERO, BigDecimal::add);
+    private BigDecimal calculateTotalCost(Map<Dish, Integer> dishAmountMap) {
+        BigDecimal sum = new BigDecimal(0);
+        for (Map.Entry<Dish, Integer> entry : dishAmountMap.entrySet()) {
+            BigDecimal element = new BigDecimal(entry.getValue());
+            element = element.multiply(entry.getKey().getPrice());
+            sum = sum.add(element);
+        }
+        return sum;
     }
 
 }
