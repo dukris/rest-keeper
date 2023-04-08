@@ -25,6 +25,7 @@
 		<javax.validation.version>2.0.1.Final</javax.validation.version>
 		<io.minio.version>8.5.1</io.minio.version>
 		<org.jooq.version>0.9.15</org.jooq.version>
+		<org.apache.commons.version>1.10.0</org.apache.commons.version>
 	</properties>
 
 	<dependencies>
@@ -128,6 +129,12 @@
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>${jakarta-persistence.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>${org.apache.commons.version}</version>
 		</dependency>
 
 		<dependency>
