@@ -7,6 +7,7 @@ import by.bsuir.restkeeper.domain.criteria.OrderSearchCriteria;
 import by.bsuir.restkeeper.service.OrderService;
 import by.bsuir.restkeeper.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
+import org.jooq.lambda.Seq;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,7 +15,9 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -77,8 +80,18 @@ public class StatisticsServiceImpl implements StatisticsService {
     private Dish getPopularDish() {
         List<Order> orders = getOrders(
                 LocalDate.now().atStartOfDay(), LocalDateTime.now());
-        //todo
-        return null;
+        List<Dish> dishes = new ArrayList<>();
+        for (Order order : orders) {
+            Map<Dish, Integer> map = order.getDishAmountMap();
+            for (Map.Entry<Dish, Integer> entry : map.entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
+                    dishes.add(entry.getKey());
+                }
+            }
+        }
+        return Seq.of(dishes)
+                .mode()
+                .orElseThrow()
+                .get(0);
     }
-
 }
