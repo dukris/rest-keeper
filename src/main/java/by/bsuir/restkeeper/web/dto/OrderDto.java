@@ -3,7 +3,7 @@ package by.bsuir.restkeeper.web.dto;
 import by.bsuir.restkeeper.domain.Dish;
 import by.bsuir.restkeeper.domain.Order;
 import by.bsuir.restkeeper.domain.User;
-import by.bsuir.restkeeper.web.dto.group.OnCreate;
+import by.bsuir.restkeeper.web.dto.group.OnCreateOrder;
 import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public record OrderDto(
 
-        @Null(groups = {OnCreate.class}, message = "Id should be blank!")
+        @Null(groups = {OnCreateOrder.class}, message = "Id should be blank!")
         @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
         Long id,
 

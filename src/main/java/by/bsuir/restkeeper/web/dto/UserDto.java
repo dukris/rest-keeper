@@ -42,9 +42,10 @@ public record UserDto(
         LocalDate dateOfBirth,
 
         @Positive(groups = {OnUpdate.class}, message = "Phone number must be positive!")
+        @NotNull(groups = {OnUpdate.class},message = "Phone number can't be blank!")
         Integer phoneNumber,
 
-        @NotBlank(groups = {OnUpdate.class}, message = "Photo can't be blank!")
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         String photoPath,
 
         @Valid
