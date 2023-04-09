@@ -113,8 +113,7 @@ public class UserServiceImpl implements UserService {
         OrderSearchCriteria criteria = new OrderSearchCriteria();
         criteria.setFrom(LocalDate.now().atStartOfDay());
         criteria.setTo(LocalDateTime.now());
-        return orderService.retrieveAllByCriteria(criteria)
-                .stream()
+        return orderService.retrieveAllByCriteria(criteria).stream()
                 .filter(order -> order.getUser().equals(user))
                 .count();
     }
