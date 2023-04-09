@@ -52,7 +52,10 @@ public record UserDto(
         Address address,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        Boolean enabled
+        Boolean enabled,
+
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        Long score
 
 ) {
 }

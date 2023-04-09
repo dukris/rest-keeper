@@ -52,12 +52,15 @@ public class User implements UserDetails {
     @Column(name = "photo_path")
     private String photoPath;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
     @Column(nullable = false)
     private Boolean enabled;
+
+    @Transient
+    private Long score;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

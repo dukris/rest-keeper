@@ -3,15 +3,19 @@ package by.bsuir.restkeeper.service.impl;
 import by.bsuir.restkeeper.domain.Address;
 import by.bsuir.restkeeper.domain.Artifact;
 import by.bsuir.restkeeper.domain.User;
+import by.bsuir.restkeeper.domain.criteria.OrderSearchCriteria;
 import by.bsuir.restkeeper.domain.criteria.UserSearchCriteria;
 import by.bsuir.restkeeper.domain.exception.ResourceAlreadyExistsException;
 import by.bsuir.restkeeper.domain.exception.ResourceNotFoundException;
 import by.bsuir.restkeeper.persistence.UserRepository;
+import by.bsuir.restkeeper.service.OrderService;
 import by.bsuir.restkeeper.service.StorageService;
 import by.bsuir.restkeeper.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,12 +24,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final StorageService storageService;
+    private final OrderService orderService;
 
     @Override
     public List<User> retrieveAllByCriteria(UserSearchCriteria criteria) {
         return criteria.getRole() != null ?
                 userRepository.findByRole(criteria.getRole()) :
                 userRepository.findAll();
+    }
+
+    @Override
+    public List<User> getWaiters() {
+        List<User> waiters = userRepository.findByRole(User.Role.ROLE_HALL);
+        waiters.forEach(waiter -> waiter.setScore(calculateScore(waiter)));
+        return waiters;
     }
 
     @Override
@@ -36,8 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User retrieveByEmail(String email) {
-        return userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email = " + email + " not found!"));
+        if (user.getRole() == User.Role.ROLE_HALL) {
+            user.setScore(calculateScore(user));
+        }
+        return user;
     }
 
     @Override
@@ -91,6 +107,16 @@ public class UserServiceImpl implements UserService {
         String path = storageService.deletePhoto(id, filename);
         user.setPhotoPath(path);
         userRepository.save(user);
+    }
+
+    private Long calculateScore(User user) {
+        OrderSearchCriteria criteria = new OrderSearchCriteria();
+        criteria.setFrom(LocalDate.now().atStartOfDay());
+        criteria.setTo(LocalDateTime.now());
+        return orderService.retrieveAllByCriteria(criteria)
+                .stream()
+                .filter(order -> order.getUser().equals(user))
+                .count();
     }
 
 }

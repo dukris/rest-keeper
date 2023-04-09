@@ -45,6 +45,12 @@ public class UserController {
         return userMapper.toDto(users);
     }
 
+    @GetMapping("/waiters")
+    public List<UserDto> getWaiters() {
+        List<User> waiters = userService.getWaiters();
+        return userMapper.toDto(waiters);
+    }
+
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
         User user = userService.retrieveById(id);
@@ -67,7 +73,7 @@ public class UserController {
     }
 
     @SneakyThrows
-    @PostMapping ("/{id}/photos")
+    @PostMapping("/{id}/photos")
     public UserDto addPhoto(@Validated ArtifactDto artifactDto,
                             @PathVariable Long id) {
         Artifact artifact = artifactMapper.toEntity(artifactDto);
@@ -75,12 +81,11 @@ public class UserController {
         return userMapper.toDto(updatedUser);
     }
 
-    @DeleteMapping ("/{id}/photos")
+    @DeleteMapping("/{id}/photos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePhoto(@PathVariable Long id,
                             @RequestParam String filename) {
         userService.deletePhoto(id, filename);
     }
-
 
 }
