@@ -53,6 +53,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     private BigDecimal getAverageBill() {
         BigDecimal sum = calculateRevenue(LocalDate.now().atStartOfDay(), LocalDateTime.now());
         BigDecimal amount = new BigDecimal(getDailyAmountOfOrders());
+        if (amount.equals(BigDecimal.ZERO)) {
+            return amount;
+        }
         return sum.divide(amount, RoundingMode.HALF_UP);
     }
 
@@ -80,6 +83,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     private Dish getPopularDish() {
         List<Order> orders = getOrders(
                 LocalDate.now().atStartOfDay(), LocalDateTime.now());
+        if (orders.isEmpty()) {
+            return null; //todo
+        }
         List<Dish> dishes = new ArrayList<>();
         for (Order order : orders) {
             Map<Dish, Integer> map = order.getDishAmountMap();

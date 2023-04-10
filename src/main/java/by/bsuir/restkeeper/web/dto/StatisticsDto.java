@@ -1,7 +1,5 @@
 package by.bsuir.restkeeper.web.dto;
 
-import by.bsuir.restkeeper.domain.Dish;
-
 import java.math.BigDecimal;
 
 public record StatisticsDto(
@@ -12,7 +10,7 @@ public record StatisticsDto(
         Integer dailyAmountOfGuests,
         Integer morningAmountOfGuests,
         Integer eveningAmountOfGuests,
-        Dish dailyDish
+        DishDto dailyDish
 
 ) {
 }

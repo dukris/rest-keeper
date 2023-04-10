@@ -33,7 +33,7 @@ public class AddressController {
         return addressMapper.toDto(address);
     }
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto create(@Validated(OnCreate.class) @RequestBody AddressDto addressDto) {
         Address address = addressMapper.toEntity(addressDto);

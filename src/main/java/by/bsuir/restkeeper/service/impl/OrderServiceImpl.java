@@ -62,14 +62,15 @@ public class OrderServiceImpl implements OrderService {
         order.setDishAmountMap(new HashMap<>());
         order.setStatus(Order.Status.RECEIVED);
         order.setTime(LocalDateTime.now());
+        order.setCost(BigDecimal.ZERO);
         return orderRepository.save(order);
     }
 
     @Override
-    public Order submit(Order order) {
-        Order foundOrder = retrieveById(order.getId());
-        foundOrder.setCost(calculateTotalCost(order.getDishAmountMap()));
-        return orderRepository.save(foundOrder);
+    public Order submit(Long id) {
+        Order order = retrieveById(id);
+        order.setCost(calculateTotalCost(order.getDishAmountMap()));
+        return orderRepository.save(order);
     }
 
     @Override

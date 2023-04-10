@@ -15,7 +15,7 @@ public interface OrderService {
 
     Order create(Order order);
 
-    Order submit(Order order);
+    Order submit(Long id);
 
     Order addDish(Long orderId, Long dishId, Integer number);
 

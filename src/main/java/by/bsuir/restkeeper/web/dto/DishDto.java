@@ -1,6 +1,7 @@
 package by.bsuir.restkeeper.web.dto;
 
 import by.bsuir.restkeeper.web.dto.group.OnCreate;
+import by.bsuir.restkeeper.web.dto.group.OnCreateOrder;
 import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 
 public record DishDto (
 
-        @Null(groups = {OnCreate.class}, message = "Id should be blank!")
+        @Null(groups = {OnCreate.class, OnCreateOrder.class}, message = "Id should be blank!")
         @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
         Long id,
 
