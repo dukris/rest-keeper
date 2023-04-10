@@ -41,7 +41,7 @@ public class CsvBuilder implements Builder {
                         record.getDailyAmountOfGuests(),
                         record.getFirstHalfAmountOfGuests(),
                         record.getLastHalfAmountOfGuests(),
-                        record.getDailyDish()));
+                        record.getDailyDish().getName()));
             }
             csvPrinter.flush();
         }
