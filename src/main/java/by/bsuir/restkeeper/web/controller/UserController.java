@@ -40,52 +40,52 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> getAllByCriteria(UserSearchCriteriaDto criteriaDto) {
-        UserSearchCriteria criteria = userSearchCriteriaMapper.toEntity(criteriaDto);
-        List<User> users = userService.retrieveAllByCriteria(criteria);
-        return userMapper.toDto(users);
+        UserSearchCriteria criteria = this.userSearchCriteriaMapper.toEntity(criteriaDto);
+        List<User> users = this.userService.retrieveAllByCriteria(criteria);
+        return this.userMapper.toDto(users);
     }
 
     @GetMapping("/waiters")
     public List<UserDto> getWaiters() {
-        List<User> waiters = userService.getWaiters();
-        return userMapper.toDto(waiters);
+        List<User> waiters = this.userService.getWaiters();
+        return this.userMapper.toDto(waiters);
     }
 
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
-        User user = userService.retrieveById(id);
-        return userMapper.toDto(user);
+        User user = this.userService.retrieveById(id);
+        return this.userMapper.toDto(user);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        userService.delete(id);
+        this.userService.delete(id);
     }
 
     @PutMapping("/{id}")
     public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto userDto,
                           @PathVariable Long id) {
-        User user = userMapper.toEntity(userDto);
+        User user = this.userMapper.toEntity(userDto);
         user.setId(id);
-        User updatedUser = userService.update(user);
-        return userMapper.toDto(updatedUser);
+        User updatedUser = this.userService.update(user);
+        return this.userMapper.toDto(updatedUser);
     }
 
     @SneakyThrows
     @PostMapping("/{id}/photos")
     public UserDto addPhoto(@Validated ArtifactDto artifactDto,
                             @PathVariable Long id) {
-        Artifact artifact = artifactMapper.toEntity(artifactDto);
-        User updatedUser = userService.addPhoto(id, artifact);
-        return userMapper.toDto(updatedUser);
+        Artifact artifact = this.artifactMapper.toEntity(artifactDto);
+        User updatedUser = this.userService.addPhoto(id, artifact);
+        return this.userMapper.toDto(updatedUser);
     }
 
     @DeleteMapping("/{id}/photos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePhoto(@PathVariable Long id,
                             @RequestParam String filename) {
-        userService.deletePhoto(id, filename);
+        this.userService.deletePhoto(id, filename);
     }
 
 }

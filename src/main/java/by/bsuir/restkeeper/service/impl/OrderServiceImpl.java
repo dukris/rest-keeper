@@ -28,32 +28,32 @@ public class OrderServiceImpl implements OrderService {
         if (orderSearchCriteria.getFrom() != null &&
                 orderSearchCriteria.getTo() != null &&
                 orderSearchCriteria.getStatus() != null) {
-            return orderRepository.findByStatusAndTimeBetween(
+            return this.orderRepository.findByStatusAndTimeBetween(
                     orderSearchCriteria.getStatus(),
                     orderSearchCriteria.getFrom(),
                     orderSearchCriteria.getTo());
         }
         if (orderSearchCriteria.getFrom() != null && orderSearchCriteria.getTo() != null) {
-            return orderRepository.findByTimeBetween(orderSearchCriteria.getFrom(), orderSearchCriteria.getTo());
+            return this.orderRepository.findByTimeBetween(orderSearchCriteria.getFrom(), orderSearchCriteria.getTo());
         }
         if (orderSearchCriteria.getStatus() != null) {
-            return orderRepository.findByStatus(orderSearchCriteria.getStatus());
+            return this.orderRepository.findByStatus(orderSearchCriteria.getStatus());
         } else {
-            return orderRepository.findAll();
+            return this.orderRepository.findAll();
         }
     }
 
     @Override
     public Order retrieveById(Long id) {
-        return orderRepository.findById(id)
+        return this.orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order with id = " + id + " not found!"));
     }
 
     @Override
     public Order changeStatus(Long id, Order.Status status) {
-        Order order = retrieveById(id);
+        Order order = this.retrieveById(id);
         order.setStatus(status);
-        return orderRepository.save(order);
+        return this.orderRepository.save(order);
     }
 
 
@@ -63,29 +63,29 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Order.Status.RECEIVED);
         order.setTime(LocalDateTime.now());
         order.setCost(BigDecimal.ZERO);
-        return orderRepository.save(order);
+        return this.orderRepository.save(order);
     }
 
     @Override
     public Order submit(Long id) {
-        Order order = retrieveById(id);
-        order.setCost(calculateTotalCost(order.getDishAmountMap()));
-        return orderRepository.save(order);
+        Order order = this.retrieveById(id);
+        order.setCost(this.calculateTotalCost(order.getDishAmountMap()));
+        return this.orderRepository.save(order);
     }
 
     @Override
     public Order addDish(Long orderId, Long dishId, Integer number) {
-        Order order = retrieveById(orderId);
-        Dish dish = dishService.retrieveById(dishId);
+        Order order = this.retrieveById(orderId);
+        Dish dish = this.dishService.retrieveById(dishId);
         Map<Dish, Integer> dishAmountMap = order.getDishAmountMap();
         dishAmountMap.put(dish, number);
         order.setDishAmountMap(dishAmountMap);
-        return orderRepository.save(order);
+        return this.orderRepository.save(order);
     }
 
     @Override
     public void delete(Long id) {
-        orderRepository.deleteById(id);
+        this.orderRepository.deleteById(id);
     }
 
     private BigDecimal calculateTotalCost(Map<Dish, Integer> dishAmountMap) {

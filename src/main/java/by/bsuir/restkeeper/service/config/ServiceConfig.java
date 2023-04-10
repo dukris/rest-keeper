@@ -23,8 +23,8 @@ public class ServiceConfig {
     public MinioClient minioClient() {
         try {
             return MinioClient.builder()
-                    .endpoint(minioProperty.getUrl())
-                    .credentials(minioProperty.getAccessKey(), minioProperty.getSecretKey())
+                    .endpoint(this.minioProperty.getUrl())
+                    .credentials(this.minioProperty.getAccessKey(), this.minioProperty.getSecretKey())
                     .build();
         } catch (Exception e) {
             throw new StorageException("Unable to connect to minio!");
@@ -34,12 +34,12 @@ public class ServiceConfig {
     @Bean
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(mailProperty.getHost());
-        mailSender.setUsername(mailProperty.getUsername());
-        mailSender.setPassword(mailProperty.getPassword());
-        mailSender.setPort(mailProperty.getPort());
+        mailSender.setHost(this.mailProperty.getHost());
+        mailSender.setUsername(this.mailProperty.getUsername());
+        mailSender.setPassword(this.mailProperty.getPassword());
+        mailSender.setPort(this.mailProperty.getPort());
         Properties properties = mailSender.getJavaMailProperties();
-        properties.setProperty("mail.transport.protocol", mailProperty.getProtocol());
+        properties.setProperty("mail.transport.protocol", this.mailProperty.getProtocol());
         return mailSender;
     }
 

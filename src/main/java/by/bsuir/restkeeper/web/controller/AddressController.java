@@ -29,29 +29,29 @@ public class AddressController {
 
     @GetMapping("/{id}")
     public AddressDto getById(@PathVariable Long id) {
-        Address address = addressService.retrieveById(id);
-        return addressMapper.toDto(address);
+        Address address = this.addressService.retrieveById(id);
+        return this.addressMapper.toDto(address);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto create(@Validated(OnCreate.class) @RequestBody AddressDto addressDto) {
-        Address address = addressMapper.toEntity(addressDto);
-        address = addressService.create(address);
-        return addressMapper.toDto(address);
+        Address address = this.addressMapper.toEntity(addressDto);
+        address = this.addressService.create(address);
+        return this.addressMapper.toDto(address);
     }
 
     @PutMapping("/{id}")
     public AddressDto update(@Validated(OnUpdate.class) @RequestBody AddressDto addressDto) {
-        Address address = addressMapper.toEntity(addressDto);
-        address = addressService.update(address);
-        return addressMapper.toDto(address);
+        Address address = this.addressMapper.toEntity(addressDto);
+        address = this.addressService.update(address);
+        return this.addressMapper.toDto(address);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        addressService.delete(id);
+        this.addressService.delete(id);
     }
 
 }

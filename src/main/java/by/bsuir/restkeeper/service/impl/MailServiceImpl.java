@@ -30,14 +30,14 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendMail(User user, String template, String subject, String link) {
         try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
             helper.setSubject(subject);
-            helper.setFrom(mailProperty.getUsername());
+            helper.setFrom(this.mailProperty.getUsername());
             helper.setTo(user.getEmail());
-            String emailContent = getEmailContent(user, template, link);
+            String emailContent = this.getEmailContent(user, template, link);
             helper.setText(emailContent, true);
-            javaMailSender.send(mimeMessage);
+            this.javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             throw new MailException("Unable to send mail, try again!");
         }
@@ -49,7 +49,7 @@ public class MailServiceImpl implements MailService {
         Map<String, Object> model = new HashMap<>();
         model.put("user", user);
         model.put("link", link);
-        configuration.getTemplate(template).process(model, stringWriter);
+        this.configuration.getTemplate(template).process(model, stringWriter);
         return stringWriter.getBuffer().toString();
     }
 

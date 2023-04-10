@@ -29,33 +29,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> retrieveAllByCriteria(UserSearchCriteria criteria) {
         return criteria.getRole() != null ?
-                userRepository.findByRole(criteria.getRole()) :
-                userRepository.findAll();
+                this.userRepository.findByRole(criteria.getRole()) :
+                this.userRepository.findAll();
     }
 
     @Override
     public List<User> getWaiters() {
-        List<User> waiters = userRepository.findByRole(User.Role.ROLE_HALL);
-        waiters.forEach(waiter -> waiter.setScore(calculateScore(waiter)));
+        List<User> waiters = this.userRepository.findByRole(User.Role.ROLE_HALL);
+        waiters.forEach(waiter -> waiter.setScore(this.calculateScore(waiter)));
         return waiters;
     }
 
     @Override
     public User retrieveById(Long id) {
-        User user = userRepository.findById(id)
+        User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id = " + id + " not found!"));
         if (user.getRole() == User.Role.ROLE_HALL) {
-            user.setScore(calculateScore(user));
+            user.setScore(this.calculateScore(user));
         }
         return user;
     }
 
     @Override
     public User retrieveByEmail(String email) {
-        User user = userRepository.findByEmail(email)
+        User user = this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email = " + email + " not found!"));
         if (user.getRole() == User.Role.ROLE_HALL) {
-            user.setScore(calculateScore(user));
+            user.setScore(this.calculateScore(user));
         }
         return user;
     }
@@ -63,20 +63,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updatePassword(User user, String newPassword) {
         user.setPassword(newPassword);
-        return userRepository.save(user);
+        return this.userRepository.save(user);
     }
 
     @Override
     public User create(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (this.userRepository.existsByEmail(user.getEmail())) {
             throw new ResourceAlreadyExistsException("User with email = " + user.getEmail() + " already exists!");
         }
-        return userRepository.save(user);
+        return this.userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
-        User foundUser = retrieveById(user.getId());
+        User foundUser = this.retrieveById(user.getId());
         foundUser.setName(user.getName());
         foundUser.setSurname(user.getSurname());
         foundUser.setRole(user.getRole());
@@ -89,35 +89,35 @@ public class UserServiceImpl implements UserService {
         address.setHouse(user.getAddress().getHouse());
         address.setFlat(user.getAddress().getFlat());
         foundUser.setAddress(address);
-        return userRepository.save(foundUser);
+        return this.userRepository.save(foundUser);
     }
 
     @Override
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        this.userRepository.deleteById(id);
     }
 
     @Override
     public User addPhoto(Long id, Artifact photo) {
-        User user = retrieveById(id);
-        String path = storageService.uploadPhoto(id, photo);
+        User user = this.retrieveById(id);
+        String path = this.storageService.uploadPhoto(id, photo);
         user.setPhotoPath(path);
-        return userRepository.save(user);
+        return this.userRepository.save(user);
     }
 
     @Override
     public void deletePhoto(Long id, String filename) {
-        User user = retrieveById(id);
-        String path = storageService.deletePhoto(id, filename);
+        User user = this.retrieveById(id);
+        String path = this.storageService.deletePhoto(id, filename);
         user.setPhotoPath(path);
-        userRepository.save(user);
+        this.userRepository.save(user);
     }
 
     private Long calculateScore(User user) {
         OrderSearchCriteria criteria = new OrderSearchCriteria();
         criteria.setFrom(LocalDate.now().atStartOfDay());
         criteria.setTo(LocalDateTime.now());
-        return orderService.retrieveAllByCriteria(criteria).stream()
+        return this.orderService.retrieveAllByCriteria(criteria).stream()
                 .filter(order -> order.getUser().equals(user))
                 .count();
     }

@@ -28,7 +28,7 @@ public class ImageFileValidator implements ConstraintValidator<ValidImage, Multi
                     .addConstraintViolation();
             return false;
         }
-        if (!isSupportedExtension(extension)) {
+        if (!this.isSupportedExtension(extension)) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("Only " + Arrays.toString(TYPES) + " images are allowed!")
                     .addConstraintViolation();

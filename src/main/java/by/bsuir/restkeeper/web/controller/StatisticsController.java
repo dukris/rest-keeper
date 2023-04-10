@@ -19,8 +19,8 @@ public class StatisticsController {
 
     @GetMapping
     public StatisticsDto get() {
-        Statistics statistics = statisticsService.getStatistics();
-        return statisticsMapper.toDto(statistics);
+        Statistics statistics = this.statisticsService.getStatistics();
+        return this.statisticsMapper.toDto(statistics);
     }
 
 }

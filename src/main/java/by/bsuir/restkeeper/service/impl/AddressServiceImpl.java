@@ -16,28 +16,28 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address retrieveById(Long id) {
-        return addressRepository.findById(id)
+        return this.addressRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Address with id = " + id + " not found!"));
     }
 
     @Override
     public Address create(Address address) {
-        return addressRepository.save(address);
+        return this.addressRepository.save(address);
     }
 
     @Override
     public Address update(Address address) {
-        Address foundAddress = retrieveById(address.getId());
+        Address foundAddress = this.retrieveById(address.getId());
         foundAddress.setCity(address.getCity());
         foundAddress.setStreet(address.getStreet());
         foundAddress.setHouse(address.getHouse());
         foundAddress.setFlat(address.getFlat());
-        return addressRepository.save(foundAddress);
+        return this.addressRepository.save(foundAddress);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        addressRepository.deleteById(id);
+        this.addressRepository.deleteById(id);
     }
 }

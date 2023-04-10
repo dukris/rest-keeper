@@ -40,53 +40,53 @@ public class OrderController {
 
     @GetMapping //statistics: list of orders by period of time, by status
     public List<OrderDto> getAllByCriteria(OrderSearchCriteriaDto criteriaDto) {
-        OrderSearchCriteria criteria = orderSearchCriteriaMapper.toEntity(criteriaDto);
-        List<Order> orders = orderService.retrieveAllByCriteria(criteria);
-        return orderMapper.toDto(orders);
+        OrderSearchCriteria criteria = this.orderSearchCriteriaMapper.toEntity(criteriaDto);
+        List<Order> orders = this.orderService.retrieveAllByCriteria(criteria);
+        return this.orderMapper.toDto(orders);
     }
 
     @GetMapping("/{id}")
     public OrderDto getById(@PathVariable Long id) {
-        Order order = orderService.retrieveById(id);
-        return orderMapper.toDto(order);
+        Order order = this.orderService.retrieveById(id);
+        return this.orderMapper.toDto(order);
     }
 
     @PostMapping("/{id}/status") //change status only
     public OrderDto changeStatus(@PathVariable Long id,
                                  @RequestParam Order.Status status) {
-        Order order = orderService.changeStatus(id, status);
-        return orderMapper.toDto(order);
+        Order order = this.orderService.changeStatus(id, status);
+        return this.orderMapper.toDto(order);
     }
 
     @PostMapping//create order with tableNumber, guests and userId: set time, status
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto create(@Validated(OnCreateOrder.class) @RequestBody CreateOrderDto orderDto) {
-        Order order = createOrderMapper.toEntity(orderDto);
-        User user = userService.retrieveById(order.getUser().getId());
+        Order order = this.createOrderMapper.toEntity(orderDto);
+        User user = this.userService.retrieveById(order.getUser().getId());
         order.setUser(user);
-        order = orderService.create(order);
-        return orderMapper.toDto(order);
+        order = this.orderService.create(order);
+        return this.orderMapper.toDto(order);
     }
 
     @PostMapping("/{orderId}/dishes/{dishId}") //add dishes
     public OrderDto addDish(@PathVariable Long orderId,
                             @PathVariable Long dishId,
                             @RequestParam Integer amount) {
-        Order order = orderService.addDish(orderId, dishId, amount);
-        return orderMapper.toDto(order);
+        Order order = this.orderService.addDish(orderId, dishId, amount);
+        return this.orderMapper.toDto(order);
     }
 
 
     @PostMapping("/{id}") //submit order: set cost
     public OrderDto submit(@PathVariable Long id) {
-        Order order = orderService.submit(id);
-        return orderMapper.toDto(order);
+        Order order = this.orderService.submit(id);
+        return this.orderMapper.toDto(order);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        orderService.delete(id);
+        this.orderService.delete(id);
     }
 
 }

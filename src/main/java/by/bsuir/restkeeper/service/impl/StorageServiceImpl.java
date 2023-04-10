@@ -33,19 +33,19 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public String uploadPhoto(Long userId, Artifact photo) {
         try {
-            createBucket();
+            this.createBucket();
             CompletableFuture<Void> allFutures = CompletableFuture.allOf(
                     CompletableFuture.runAsync(() -> {
                         String path = "users/" + userId + "/100/" + photo.getFilename();
-                        savePhoto(path, generateThumbnail(photo, 100));
+                        this.savePhoto(path, this.generateThumbnail(photo, 100));
                     }),
                     CompletableFuture.runAsync(() -> {
                         String path = "users/" + userId + "/400/" + photo.getFilename();
-                        savePhoto(path, generateThumbnail(photo, 400));
+                        this.savePhoto(path, this.generateThumbnail(photo, 400));
                     })
             );
             String path = "users/" + userId + "/original/" + photo.getFilename();
-            savePhoto(path, new ByteArrayInputStream(photo.getBytes()));
+            this.savePhoto(path, new ByteArrayInputStream(photo.getBytes()));
             allFutures.get();
             return path;
         } catch (Exception ex) {
@@ -57,11 +57,11 @@ public class StorageServiceImpl implements StorageService {
     public String deletePhoto(Long userId, String filename) {
         try {
             String path = "users/" + userId + "/100/" + filename;
-            removePhoto(path);
+            this.removePhoto(path);
             path = "users/" + userId + "/400/" + filename;
-            removePhoto(path);
+            this.removePhoto(path);
             path = "users/" + userId + "/original/" + filename;
-            removePhoto(path);
+            this.removePhoto(path);
             return path;
         } catch (StorageException e) {
             throw new StorageException(e.getMessage());
@@ -72,20 +72,20 @@ public class StorageServiceImpl implements StorageService {
 
     @SneakyThrows
     private void createBucket() {
-        boolean found = minioClient.bucketExists(BucketExistsArgs.builder()
-                .bucket(minioProperty.getBucket())
+        boolean found = this.minioClient.bucketExists(BucketExistsArgs.builder()
+                .bucket(this.minioProperty.getBucket())
                 .build());
         if (!found) {
-            minioClient.makeBucket(MakeBucketArgs.builder()
-                    .bucket(minioProperty.getBucket())
+            this.minioClient.makeBucket(MakeBucketArgs.builder()
+                    .bucket(this.minioProperty.getBucket())
                     .build());
         }
     }
 
     @SneakyThrows
     private void savePhoto(String path, InputStream inputStream) {
-        minioClient.putObject(PutObjectArgs.builder()
-                .bucket(minioProperty.getBucket())
+        this.minioClient.putObject(PutObjectArgs.builder()
+                .bucket(this.minioProperty.getBucket())
                 .object(path)
                 .stream(inputStream, inputStream.available(), -1)
                 .build());
@@ -93,8 +93,8 @@ public class StorageServiceImpl implements StorageService {
 
     @SneakyThrows
     private void removePhoto(String path) {
-        minioClient.removeObject(RemoveObjectArgs.builder()
-                .bucket(minioProperty.getBucket())
+        this.minioClient.removeObject(RemoveObjectArgs.builder()
+                .bucket(this.minioProperty.getBucket())
                 .object(path)
                 .build());
     }

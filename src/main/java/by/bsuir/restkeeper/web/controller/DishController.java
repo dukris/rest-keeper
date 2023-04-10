@@ -35,36 +35,36 @@ public class DishController {
 
     @GetMapping //get dishes by availability
     public List<DishDto> getAllByCriteria(DishSearchCriteriaDto criteriaDto) {
-        DishSearchCriteria criteria = dishSearchCriteriaMapper.toEntity(criteriaDto);
-        List<Dish> dishes = dishService.retrieveAllByCriteria(criteria);
-        return dishMapper.toDto(dishes);
+        DishSearchCriteria criteria = this.dishSearchCriteriaMapper.toEntity(criteriaDto);
+        List<Dish> dishes = this.dishService.retrieveAllByCriteria(criteria);
+        return this.dishMapper.toDto(dishes);
     }
 
     @GetMapping("/{id}")
     public DishDto getById(@PathVariable Long id) {
-        Dish dish = dishService.retrieveById(id);
-        return dishMapper.toDto(dish);
+        Dish dish = this.dishService.retrieveById(id);
+        return this.dishMapper.toDto(dish);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public DishDto create(@Validated(OnCreate.class) @RequestBody DishDto dishDto) {
-        Dish dish = dishMapper.toEntity(dishDto);
-        dish = dishService.create(dish);
-        return dishMapper.toDto(dish);
+        Dish dish = this.dishMapper.toEntity(dishDto);
+        dish = this.dishService.create(dish);
+        return this.dishMapper.toDto(dish);
     }
 
     @PutMapping("/{id}")
     public DishDto update(@Validated(OnUpdate.class) @RequestBody DishDto dishDto) {
-        Dish dish = dishMapper.toEntity(dishDto);
-        dish = dishService.update(dish);
-        return dishMapper.toDto(dish);
+        Dish dish = this.dishMapper.toEntity(dishDto);
+        dish = this.dishService.update(dish);
+        return this.dishMapper.toDto(dish);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        dishService.delete(id);
+        this.dishService.delete(id);
     }
 
 }

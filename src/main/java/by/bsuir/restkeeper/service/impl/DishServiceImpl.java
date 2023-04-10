@@ -19,33 +19,33 @@ public class DishServiceImpl implements DishService {
     @Override
     public List<Dish> retrieveAllByCriteria(DishSearchCriteria criteria) {
         return criteria.getAvailability() != null ?
-                dishRepository.findByAvailability(criteria.getAvailability()) :
-                dishRepository.findAll();
+                this.dishRepository.findByAvailability(criteria.getAvailability()) :
+                this.dishRepository.findAll();
     }
 
 
     @Override
     public Dish retrieveById(Long id) {
-        return dishRepository.findById(id)
+        return this.dishRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Dish with id = " + id + " not found!"));
     }
 
     @Override
     public Dish create(Dish dish) {
-        return dishRepository.save(dish);
+        return this.dishRepository.save(dish);
     }
 
     @Override
     public Dish update(Dish dish) {
-        Dish foundDish = retrieveById(dish.getId());
+        Dish foundDish = this.retrieveById(dish.getId());
         foundDish.setName(dish.getName());
         foundDish.setPrice(dish.getPrice());
         foundDish.setAvailability(dish.getAvailability());
-        return dishRepository.save(foundDish);
+        return this.dishRepository.save(foundDish);
     }
 
     @Override
     public void delete(Long id) {
-        dishRepository.deleteById(id);
+        this.dishRepository.deleteById(id);
     }
 }
