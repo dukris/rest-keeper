@@ -7,6 +7,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -40,7 +41,7 @@ public class Order {
     @Column(name = "guests", nullable = false)
     private Integer amountOfGuests;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "orders_dished",
             foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "order_dish_amount"),
             joinColumns = @JoinColumn(name = "order_id"))

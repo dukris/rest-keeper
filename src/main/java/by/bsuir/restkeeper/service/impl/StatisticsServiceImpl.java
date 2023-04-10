@@ -84,7 +84,9 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<Order> orders = this.getOrders(
                 LocalDate.now().atStartOfDay(), LocalDateTime.now());
         if (orders.isEmpty()) {
-            return null; //todo
+            Dish dish = new Dish();
+            dish.setName("There is no popular dish today :(");
+            return dish;
         }
         List<Dish> dishes = new ArrayList<>();
         for (Order order : orders) {
