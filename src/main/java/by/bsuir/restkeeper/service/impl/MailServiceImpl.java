@@ -2,15 +2,12 @@ package by.bsuir.restkeeper.service.impl;
 
 
 import by.bsuir.restkeeper.domain.User;
-import by.bsuir.restkeeper.domain.exception.MailException;
 import by.bsuir.restkeeper.service.MailService;
 import by.bsuir.restkeeper.service.property.MailProperty;
 import freemarker.template.Configuration;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;

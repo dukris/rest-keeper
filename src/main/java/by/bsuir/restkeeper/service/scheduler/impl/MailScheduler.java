@@ -7,7 +7,6 @@ import by.bsuir.restkeeper.service.MailService;
 import by.bsuir.restkeeper.service.StatisticsService;
 import by.bsuir.restkeeper.service.UserService;
 import by.bsuir.restkeeper.service.builder.impl.CsvBuilder;
-import by.bsuir.restkeeper.service.property.MailProperty;
 import by.bsuir.restkeeper.service.scheduler.Scheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
