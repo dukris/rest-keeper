@@ -49,7 +49,6 @@ public class StorageServiceImpl implements StorageService {
             allFutures.get();
             return path;
         } catch (Exception ex) {
-            ex.printStackTrace(); //todo remove
             throw new StorageException("Unable to upload photo, try again!");
         }
     }
@@ -67,7 +66,6 @@ public class StorageServiceImpl implements StorageService {
         } catch (StorageException e) {
             throw new StorageException(e.getMessage());
         } catch (Exception ex) {
-            ex.printStackTrace(); //todo remove
             throw new StorageException("Unable to delete photo, try again!");
         }
     }
