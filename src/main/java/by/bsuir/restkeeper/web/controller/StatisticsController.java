@@ -23,4 +23,6 @@ public class StatisticsController {
         return this.statisticsMapper.toDto(statistics);
     }
 
+    //todo download statistics
+
 }
