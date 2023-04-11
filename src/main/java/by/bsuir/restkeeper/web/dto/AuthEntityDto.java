@@ -41,6 +41,11 @@ public record AuthEntityDto(
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         User.Role role,
 
+        @NotBlank(groups = {OnRegister.class}, message = "Passport can't be blank!")
+        @Length(min = 8, max = 20, groups = {OnRegister.class}, message = "Passport must include minimum {min} and maximum {max} characters!")
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        String passport,
+
         @NotBlank(groups = {OnUpdatePassword.class}, message = "New password can't be blank!")
         @Length(min = 8, max = 20, groups = {OnUpdatePassword.class}, message = "New password must include minimum {min} and maximum {max} characters!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class Dish {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)

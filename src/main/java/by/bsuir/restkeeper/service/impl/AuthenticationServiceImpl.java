@@ -40,6 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(authEntity.getEmail());
         user.setPassword(this.passwordEncoder.encode(authEntity.getPassword()));
         user.setRole(authEntity.getRole());
+        user.setPassport(authEntity.getPassport());
         user.setEnabled(false);
         user = this.userService.create(user);
         String enableJwt = this.enableJwtManager.generateToken(user);

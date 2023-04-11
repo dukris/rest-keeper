@@ -79,7 +79,6 @@ public class UserServiceImpl implements UserService {
         User foundUser = this.retrieveById(user.getId());
         foundUser.setName(user.getName());
         foundUser.setSurname(user.getSurname());
-        foundUser.setPassport(user.getPassport());
         foundUser.setDateOfBirth(user.getDateOfBirth());
         foundUser.setPhoneNumber(user.getPhoneNumber());
         Address address = new Address();
