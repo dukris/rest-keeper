@@ -42,7 +42,7 @@ public class Order {
     private Integer amountOfGuests;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "orders_dished",
+    @CollectionTable(name = "orders_dishes",
             foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "order_dish_amount"),
             joinColumns = @JoinColumn(name = "order_id"))
     @MapKeyColumn(name = "dish")

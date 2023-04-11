@@ -24,7 +24,9 @@ spring:
 #    default-property-inclusion: NON_NULL
 
 restkeeper:
-#  context-path: /restkeeper/v1
+  link:
+    enable: http://localhost:8080/restkeeper/v1/auth/enable?enableToken=
+    refresh: http://localhost:8080/restkeeper/v1/auth/password/request?passwordRefreshToken=
   security:
     access-key: ${RESTKEEPER_SECRETS_ACCESS-KEY}
     refresh-key: ${RESTKEEPER_SECRETS_REFRESH-KEY}

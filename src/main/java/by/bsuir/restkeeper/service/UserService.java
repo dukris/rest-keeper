@@ -22,6 +22,8 @@ public interface UserService {
 
     User update(User user);
 
+    User enable(String email);
+
     void delete(Long id);
 
     User addPhoto(Long id, Artifact photo);

@@ -15,9 +15,11 @@ public class AuthEntity {
     private String surname;
     private String email;
     private String password;
+    private User.Role role;
     private String newPassword;
     private String accessToken;
     private String refreshToken;
+    private String enableToken;
     private String passwordRefreshToken;
 
 }

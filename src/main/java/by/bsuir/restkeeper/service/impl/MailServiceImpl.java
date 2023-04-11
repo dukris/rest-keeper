@@ -35,7 +35,7 @@ public class MailServiceImpl implements MailService {
         helper.setTo(user.getEmail());
         String emailContent = this.getContent(user, template, link);
         helper.setText(emailContent, true);
-        if (filename != null) {
+        if (!" ".equals(filename)) {
             helper.addAttachment(filename, new File(filename));
         }
         this.javaMailSender.send(mimeMessage);

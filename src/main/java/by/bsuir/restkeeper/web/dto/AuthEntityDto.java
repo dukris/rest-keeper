@@ -1,5 +1,6 @@
 package by.bsuir.restkeeper.web.dto;
 
+import by.bsuir.restkeeper.domain.User;
 import by.bsuir.restkeeper.web.dto.group.OnEnable;
 import by.bsuir.restkeeper.web.dto.group.OnLogin;
 import by.bsuir.restkeeper.web.dto.group.OnPasswordRefresh;
@@ -10,6 +11,7 @@ import by.bsuir.restkeeper.web.dto.group.OnUpdatePassword;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public record AuthEntityDto(
@@ -34,6 +36,10 @@ public record AuthEntityDto(
         @Length(min = 8, max = 20, groups = {OnRegister.class, OnLogin.class, OnPasswordRefresh.class, OnUpdatePassword.class}, message = "Password must include minimum {min} and maximum {max} characters!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         String password,
+
+        @NotNull(groups = {OnRegister.class}, message = "Role can't be blank!")
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        User.Role role,
 
         @NotBlank(groups = {OnUpdatePassword.class}, message = "New password can't be blank!")
         @Length(min = 8, max = 20, groups = {OnUpdatePassword.class}, message = "New password must include minimum {min} and maximum {max} characters!")

@@ -79,7 +79,6 @@ public class UserServiceImpl implements UserService {
         User foundUser = this.retrieveById(user.getId());
         foundUser.setName(user.getName());
         foundUser.setSurname(user.getSurname());
-        foundUser.setRole(user.getRole());
         foundUser.setPassport(user.getPassport());
         foundUser.setDateOfBirth(user.getDateOfBirth());
         foundUser.setPhoneNumber(user.getPhoneNumber());
@@ -90,6 +89,13 @@ public class UserServiceImpl implements UserService {
         address.setFlat(user.getAddress().getFlat());
         foundUser.setAddress(address);
         return this.userRepository.save(foundUser);
+    }
+
+    @Override
+    public User enable(String email) {
+        User user = this.retrieveByEmail(email);
+        user.setEnabled(true);
+        return this.userRepository.save(user);
     }
 
     @Override
