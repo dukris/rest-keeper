@@ -23,15 +23,15 @@ spring:
 #  jackson:
 #    default-property-inclusion: NON_NULL
 
-#restkeeper:
+restkeeper:
 #  context-path: /restkeeper/v1
-#  security:
-#    access-key: ${RESTKEEPER_SECRETS_ACCESS-KEY}
-#    refresh-key: ${RESTKEEPER_SECRETS_REFRESH-KEY}
-#    enable-key: ${RESTKEEPER_SECRETS_ENABLE-KEY}
-#    password-refresh-key: ${RESTKEEPER_SECRETS_PASSWORD-REFRESH-KEY}
-#    access-expiration-time: ${RESTKEEPER_SECRETS_ACCESS-EXPIRATION-TIME}
-#    refresh-expiration-time: ${RESTKEEPER_SECRETS_REFRESH-EXPIRATION-TIME}
+  security:
+    access-key: ${RESTKEEPER_SECRETS_ACCESS-KEY}
+    refresh-key: ${RESTKEEPER_SECRETS_REFRESH-KEY}
+    enable-key: ${RESTKEEPER_SECRETS_ENABLE-KEY}
+    password-refresh-key: ${RESTKEEPER_SECRETS_PASSWORD-REFRESH-KEY}
+    access-expiration-time: ${RESTKEEPER_SECRETS_ACCESS-EXPIRATION-TIME}
+    refresh-expiration-time: ${RESTKEEPER_SECRETS_REFRESH-EXPIRATION-TIME}
 mail:
   host: ${MAIL_HOST}
   username: ${MAIL_USERNAME}

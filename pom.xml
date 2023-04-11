@@ -26,6 +26,7 @@
 		<io.minio.version>8.5.1</io.minio.version>
 		<org.jooq.version>0.9.15</org.jooq.version>
 		<org.apache.commons.version>1.10.0</org.apache.commons.version>
+		<jwt.version>0.11.5</jwt.version>
 	</properties>
 
 	<dependencies>
@@ -141,6 +142,24 @@
 			<groupId>org.jooq</groupId>
 			<artifactId>jool-java-8</artifactId>
 			<version>${org.jooq.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jwt.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jwt.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jwt.version}</version>
 		</dependency>
 
 	</dependencies>
