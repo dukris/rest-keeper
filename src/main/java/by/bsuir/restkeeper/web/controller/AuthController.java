@@ -30,47 +30,47 @@ public class AuthController {
     private final AuthEntityMapper authEntityMapper;
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
+    @PostMapping("/register") //name, surname, password, email, passport, role
     public void register(@Validated(OnRegister.class) @RequestBody AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         this.authenticationService.register(authEntity);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") //email, password
     public AuthEntityDto login(@Validated(OnLogin.class) @RequestBody AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         AuthEntity returnedAuthEntity = this.authenticationService.login(authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh") //refreshToken
     public AuthEntityDto refresh(@Validated(OnRefresh.class) @RequestBody AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         AuthEntity returnedAuthEntity = this.authenticationService.refresh(authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 
-    @GetMapping("/enable")
+    @GetMapping("/enable") //enableToken
     public AuthEntityDto enable(@Validated(OnEnable.class) AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         AuthEntity returnedAuthEntity = this.authenticationService.enable(authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 
-    @PostMapping("/password/request")
+    @PostMapping("/password/request") //email
     public void requestPasswordRefresh(@Validated(OnRequestPasswordRefresh.class) @RequestBody AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         this.authenticationService.requestPasswordRefresh(authEntity);
     }
 
-    @PostMapping("/password/refresh")
+    @PostMapping("/password/refresh") //email, password, passwordRefreshToken
     public AuthEntityDto refreshPassword(@Validated(OnPasswordRefresh.class) @RequestBody AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         AuthEntity returnedAuthEntity = this.authenticationService.refreshPassword(authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 
-    @PreAuthorize("@securityExpressions.isUser(#userId)")
+    @PreAuthorize("@securityExpressions.isUser(#userId)") //password, new password
     @PostMapping("/users/{userId}/password/update")
     public AuthEntityDto updatePassword(@Validated(OnUpdatePassword.class) @RequestBody AuthEntityDto authEntityDto,
                                         @PathVariable Long userId) {

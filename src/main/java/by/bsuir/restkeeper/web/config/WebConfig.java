@@ -29,7 +29,9 @@ public class WebConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/restkeeper/v1/auth/users/**", "/restkeeper/v1/users/**")
+                        "/restkeeper/v1/auth/users/**", "/restkeeper/v1/users/**",
+                        "/restkeeper/v1/auth/addresses/**", "/restkeeper/v1/dishes/**",
+                        "/restkeeper/v1/auth/orders/**", "/restkeeper/v1/statistics/**")
                 .authenticated()
                 .anyRequest().permitAll()
                 .and()
