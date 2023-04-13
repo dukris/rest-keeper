@@ -21,15 +21,15 @@ public class SecurityExpressions {
         return authentication.getName().equals(user.getEmail()) && user.isEnabled();
     }
 
-    public boolean hasAdminRole(){
+    public boolean hasAdminRole() {
         return this.hasRole(User.Role.ROLE_ADMIN);
     }
 
-    public boolean hasKitchenRole(){
+    public boolean hasKitchenRole() {
         return this.hasRole(User.Role.ROLE_KITCHEN);
     }
 
-    public boolean hasHallRole(){
+    public boolean hasHallRole() {
         return this.hasRole(User.Role.ROLE_HALL);
     }
 
@@ -42,9 +42,7 @@ public class SecurityExpressions {
     public boolean hasAddress(Long addressId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = this.userService.retrieveByEmail(authentication.getName());
-        return addressId.equals(user.getAddress().getId());
+        return user.getAddress() != null && addressId.equals(user.getAddress().getId());
     }
-
-
 
 }
