@@ -14,6 +14,7 @@ import by.bsuir.restkeeper.web.dto.mapper.criteria.UserSearchCriteriaMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,7 @@ public class UserController {
     private final UserSearchCriteriaMapper userSearchCriteriaMapper;
 
     @GetMapping
+    @PreAuthorize("@securityExpressions.hasAdminRole()")
     public List<UserDto> getAllByCriteria(UserSearchCriteriaDto criteriaDto) {
         UserSearchCriteria criteria = this.userSearchCriteriaMapper.toEntity(criteriaDto);
         List<User> users = this.userService.retrieveAllByCriteria(criteria);
@@ -46,12 +48,14 @@ public class UserController {
     }
 
     @GetMapping("/waiters")
+    @PreAuthorize("@securityExpressions.hasAdminRole()")
     public List<UserDto> getWaiters() {
         List<User> waiters = this.userService.getWaiters();
         return this.userMapper.toDto(waiters);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@securityExpressions.isUser(#id) || @securityExpressions.hasAdminRole()")
     public UserDto getById(@PathVariable Long id) {
         User user = this.userService.retrieveById(id);
         return this.userMapper.toDto(user);
@@ -59,11 +63,13 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@securityExpressions.hasAdminRole()")
     public void delete(@PathVariable Long id) {
         this.userService.delete(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@securityExpressions.isUser(#id) || @securityExpressions.hasAdminRole()")
     public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto userDto,
                           @PathVariable Long id) {
         User user = this.userMapper.toEntity(userDto);
@@ -74,6 +80,7 @@ public class UserController {
 
     @SneakyThrows
     @PostMapping("/{id}/photos")
+    @PreAuthorize("@securityExpressions.isUser(#id)")
     public UserDto addPhoto(@Validated ArtifactDto artifactDto,
                             @PathVariable Long id) {
         Artifact artifact = this.artifactMapper.toEntity(artifactDto);
@@ -83,6 +90,7 @@ public class UserController {
 
     @DeleteMapping("/{id}/photos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@securityExpressions.isUser(#id)")
     public void deletePhoto(@PathVariable Long id,
                             @RequestParam String filename) {
         this.userService.deletePhoto(id, filename);

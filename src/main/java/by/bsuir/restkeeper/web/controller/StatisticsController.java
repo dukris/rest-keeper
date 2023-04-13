@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +30,14 @@ public class StatisticsController {
     private final Builder builder;
 
     @GetMapping
+    @PreAuthorize("@securityExpressions.hasAdminRole()")
     public StatisticsDto get() {
         Statistics statistics = this.statisticsService.getStatistics();
         return this.statisticsMapper.toDto(statistics);
     }
 
     @GetMapping("/download")
+    @PreAuthorize("@securityExpressions.hasAdminRole()")
     public ResponseEntity<Resource> download() {
         Statistics statistics = this.statisticsService.getStatistics();
         String filename = this.builder.build("report", List.of(statistics));

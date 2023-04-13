@@ -11,6 +11,7 @@ import by.bsuir.restkeeper.web.dto.mapper.DishMapper;
 import by.bsuir.restkeeper.web.dto.mapper.criteria.DishSearchCriteriaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,7 @@ public class DishController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("@securityExpressions.hasKitchenRole() || @securityExpressions.hasAdminRole()")
     public DishDto create(@Validated(OnCreate.class) @RequestBody DishDto dishDto) {
         Dish dish = this.dishMapper.toEntity(dishDto);
         dish = this.dishService.create(dish);
@@ -55,6 +57,7 @@ public class DishController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@securityExpressions.hasKitchenRole() || @securityExpressions.hasAdminRole()")
     public DishDto update(@Validated(OnUpdate.class) @RequestBody DishDto dishDto) {
         Dish dish = this.dishMapper.toEntity(dishDto);
         dish = this.dishService.update(dish);
@@ -63,6 +66,7 @@ public class DishController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@securityExpressions.hasKitchenRole() || @securityExpressions.hasAdminRole()")
     public void delete(@PathVariable Long id) {
         this.dishService.delete(id);
     }

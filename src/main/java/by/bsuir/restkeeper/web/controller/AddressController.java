@@ -8,6 +8,7 @@ import by.bsuir.restkeeper.web.dto.group.OnUpdate;
 import by.bsuir.restkeeper.web.dto.mapper.AddressMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class AddressController {
     private final AddressMapper addressMapper;
 
     @GetMapping("/{id}")
+    @PreAuthorize("@securityExpressions.hasAddress(#id) || @securityExpressions.hasAdminRole()")
     public AddressDto getById(@PathVariable Long id) {
         Address address = this.addressService.retrieveById(id);
         return this.addressMapper.toDto(address);
@@ -42,7 +44,9 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public AddressDto update(@Validated(OnUpdate.class) @RequestBody AddressDto addressDto) {
+    @PreAuthorize("@securityExpressions.hasAddress(#id)")
+    public AddressDto update(@PathVariable Long id,
+                             @Validated(OnUpdate.class) @RequestBody AddressDto addressDto) {
         Address address = this.addressMapper.toEntity(addressDto);
         address = this.addressService.update(address);
         return this.addressMapper.toDto(address);
@@ -50,6 +54,7 @@ public class AddressController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@securityExpressions.hasAddress(#id)")
     public void delete(@PathVariable Long id) {
         this.addressService.delete(id);
     }

@@ -14,6 +14,7 @@ import by.bsuir.restkeeper.web.dto.mapper.OrderMapper;
 import by.bsuir.restkeeper.web.dto.mapper.criteria.OrderSearchCriteriaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +61,7 @@ public class OrderController {
 
     @PostMapping//create order with tableNumber, guests and userId: set time, status
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("@securityExpressions.hasHallRole() || @securityExpressions.hasAdminRole()")
     public OrderDto create(@Validated(OnCreateOrder.class) @RequestBody CreateOrderDto orderDto) {
         Order order = this.createOrderMapper.toEntity(orderDto);
         User user = this.userService.retrieveById(order.getUser().getId());
@@ -78,6 +80,7 @@ public class OrderController {
 
 
     @PostMapping("/{id}") //submit order: set cost
+    @PreAuthorize("@securityExpressions.hasHallRole() || @securityExpressions.hasAdminRole()")
     public OrderDto submit(@PathVariable Long id) {
         Order order = this.orderService.submit(id);
         return this.orderMapper.toDto(order);
@@ -85,6 +88,7 @@ public class OrderController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@securityExpressions.hasHallRole() || @securityExpressions.hasAdminRole()")
     public void delete(@PathVariable Long id) {
         this.orderService.delete(id);
     }

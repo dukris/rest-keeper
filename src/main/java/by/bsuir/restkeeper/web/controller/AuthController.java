@@ -55,8 +55,8 @@ public class AuthController {
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 
-    @PreAuthorize("@securityExpressions.isUser(#userId)") //password, new password
-    @PostMapping("/users/{userId}/password/update")
+    @PostMapping("/users/{userId}/password/update") //password, new password
+    @PreAuthorize("@securityExpressions.isUser(#userId)")
     public AuthEntityDto updatePassword(@Validated(OnUpdatePassword.class) @RequestBody AuthEntityDto authEntityDto,
                                         @PathVariable Long userId) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
