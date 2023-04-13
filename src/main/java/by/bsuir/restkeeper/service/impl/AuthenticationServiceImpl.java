@@ -27,7 +27,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtManager accessJwtManager;
     private final JwtManager refreshJwtManager;
     private final JwtManager enableJwtManager;
-    private final JwtManager passwordRefreshJwtManager;
     private final AuthenticationManager authenticationManager;
     private final RestkeeperProperty restkeeperProperty;
 
@@ -85,30 +84,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthEntity enable(AuthEntity authEntity) {
         String email = this.enableJwtManager.extractClaim(authEntity.getEnableToken(), Claims::getSubject);
         User user = this.userService.enable(email);
-        String accessJwt = this.accessJwtManager.generateToken(user);
-        String refreshJwt = this.refreshJwtManager.generateToken(user);
-        return AuthEntity.builder()
-                .accessToken(accessJwt)
-                .refreshToken(refreshJwt)
-                .build();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public void requestPasswordRefresh(AuthEntity authEntity) {
-        User user = this.userService.retrieveByEmail(authEntity.getEmail());
-        String refreshPasswordJwt = this.passwordRefreshJwtManager.generateToken(user);
-        String subject = "Refresh password";
-        String link = this.restkeeperProperty.getRefresh() + refreshPasswordJwt;
-        this.mailService.send(user, "refreshPassword.ftl", subject, " ", link);
-    }
-
-    @Override
-    @Transactional
-    public AuthEntity refreshPassword(AuthEntity authEntity) {
-        String email = this.refreshJwtManager.extractClaim(authEntity.getPasswordRefreshToken(), Claims::getSubject);
-        User user = this.userService.retrieveByEmail(email);
-        user = this.userService.updatePassword(user, authEntity.getNewPassword());
         String accessJwt = this.accessJwtManager.generateToken(user);
         String refreshJwt = this.refreshJwtManager.generateToken(user);
         return AuthEntity.builder()

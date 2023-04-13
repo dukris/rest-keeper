@@ -12,10 +12,6 @@ public interface AuthenticationService {
 
     AuthEntity enable(AuthEntity authEntity);
 
-    void requestPasswordRefresh(AuthEntity authEntity);
-
-    AuthEntity refreshPassword(AuthEntity authEntity);
-
     AuthEntity updatePassword(Long userId, AuthEntity authEntity);
 
 }

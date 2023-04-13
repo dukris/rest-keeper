@@ -6,10 +6,8 @@ import by.bsuir.restkeeper.service.AuthenticationService;
 import by.bsuir.restkeeper.web.dto.AuthEntityDto;
 import by.bsuir.restkeeper.web.dto.group.OnEnable;
 import by.bsuir.restkeeper.web.dto.group.OnLogin;
-import by.bsuir.restkeeper.web.dto.group.OnPasswordRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnRegister;
-import by.bsuir.restkeeper.web.dto.group.OnRequestPasswordRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnUpdatePassword;
 import by.bsuir.restkeeper.web.dto.mapper.AuthEntityMapper;
 import lombok.RequiredArgsConstructor;
@@ -54,19 +52,6 @@ public class AuthController {
     public AuthEntityDto enable(@Validated(OnEnable.class) AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         AuthEntity returnedAuthEntity = this.authenticationService.enable(authEntity);
-        return this.authEntityMapper.toDto(returnedAuthEntity);
-    }
-
-    @PostMapping("/password/request") //email
-    public void requestPasswordRefresh(@Validated(OnRequestPasswordRefresh.class) @RequestBody AuthEntityDto authEntityDto) {
-        AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
-        this.authenticationService.requestPasswordRefresh(authEntity);
-    }
-
-    @PostMapping("/password/refresh") //email, password, passwordRefreshToken
-    public AuthEntityDto refreshPassword(@Validated(OnPasswordRefresh.class) @RequestBody AuthEntityDto authEntityDto) {
-        AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
-        AuthEntity returnedAuthEntity = this.authenticationService.refreshPassword(authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 

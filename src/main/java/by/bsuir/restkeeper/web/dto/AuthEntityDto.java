@@ -3,10 +3,8 @@ package by.bsuir.restkeeper.web.dto;
 import by.bsuir.restkeeper.domain.User;
 import by.bsuir.restkeeper.web.dto.group.OnEnable;
 import by.bsuir.restkeeper.web.dto.group.OnLogin;
-import by.bsuir.restkeeper.web.dto.group.OnPasswordRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnRegister;
-import by.bsuir.restkeeper.web.dto.group.OnRequestPasswordRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnUpdatePassword;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -26,14 +24,14 @@ public record AuthEntityDto(
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         String surname,
 
-        @NotBlank(groups = {OnRegister.class, OnLogin.class, OnRequestPasswordRefresh.class, OnPasswordRefresh.class}, message = "Email can't be blank!")
-        @Email(groups = {OnRegister.class, OnLogin.class, OnRequestPasswordRefresh.class, OnPasswordRefresh.class}, message = "Not an email!")
-        @Length(min = 6, max = 50, groups = {OnRegister.class, OnLogin.class, OnRequestPasswordRefresh.class, OnPasswordRefresh.class}, message = "Email must include minimum {min} and maximum {max} characters!")
+        @NotBlank(groups = {OnRegister.class, OnLogin.class}, message = "Email can't be blank!")
+        @Email(groups = {OnRegister.class, OnLogin.class}, message = "Not an email!")
+        @Length(min = 6, max = 50, groups = {OnRegister.class, OnLogin.class}, message = "Email must include minimum {min} and maximum {max} characters!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         String email,
 
-        @NotBlank(groups = {OnRegister.class, OnLogin.class, OnPasswordRefresh.class, OnUpdatePassword.class}, message = "Password can't be blank!")
-        @Length(min = 8, max = 20, groups = {OnRegister.class, OnLogin.class, OnPasswordRefresh.class, OnUpdatePassword.class}, message = "Password must include minimum {min} and maximum {max} characters!")
+        @NotBlank(groups = {OnRegister.class, OnLogin.class, OnUpdatePassword.class}, message = "Password can't be blank!")
+        @Length(min = 8, max = 20, groups = {OnRegister.class, OnLogin.class, OnUpdatePassword.class}, message = "Password must include minimum {min} and maximum {max} characters!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         String password,
 
@@ -59,11 +57,7 @@ public record AuthEntityDto(
 
         @NotBlank(groups = {OnEnable.class}, message = "Enable token can't be blank!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-        String enableToken,
-
-        @NotBlank(groups = {OnPasswordRefresh.class}, message = "Password refresh token can't be blank!")
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-        String passwordRefreshToken
+        String enableToken
 
 ) {
 }
