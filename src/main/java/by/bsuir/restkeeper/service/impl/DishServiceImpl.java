@@ -7,6 +7,7 @@ import by.bsuir.restkeeper.persistence.DishRepository;
 import by.bsuir.restkeeper.service.DishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,11 +32,13 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional
     public Dish create(Dish dish) {
         return this.dishRepository.save(dish);
     }
 
     @Override
+    @Transactional
     public Dish update(Dish dish) {
         Dish foundDish = this.retrieveById(dish.getId());
         foundDish.setName(dish.getName());
@@ -45,6 +48,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         this.dishRepository.deleteById(id);
     }

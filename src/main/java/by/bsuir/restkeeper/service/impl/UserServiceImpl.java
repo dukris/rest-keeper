@@ -13,6 +13,7 @@ import by.bsuir.restkeeper.service.StorageService;
 import by.bsuir.restkeeper.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,12 +62,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updatePassword(User user, String newPassword) {
         user.setPassword(newPassword);
         return this.userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public User create(User user) {
         if (this.userRepository.existsByEmail(user.getEmail())) {
             throw new ResourceAlreadyExistsException("User with email = " + user.getEmail() + " already exists!");
@@ -75,6 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User update(User user) {
         User foundUser = this.retrieveById(user.getId());
         foundUser.setName(user.getName());
@@ -91,6 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User enable(String email) {
         User user = this.retrieveByEmail(email);
         user.setEnabled(true);
@@ -98,11 +103,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         this.userRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public User addPhoto(Long id, Artifact photo) {
         User user = this.retrieveById(id);
         String path = this.storageService.uploadPhoto(id, photo);
@@ -111,6 +118,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deletePhoto(Long id, String filename) {
         User user = this.retrieveById(id);
         String path = this.storageService.deletePhoto(id, filename);

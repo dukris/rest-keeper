@@ -21,11 +21,13 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public Address create(Address address) {
         return this.addressRepository.save(address);
     }
 
     @Override
+    @Transactional
     public Address update(Address address) {
         Address foundAddress = this.retrieveById(address.getId());
         foundAddress.setCity(address.getCity());

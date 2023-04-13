@@ -9,6 +9,7 @@ import by.bsuir.restkeeper.service.DishService;
 import by.bsuir.restkeeper.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order changeStatus(Long id, Order.Status status) {
         Order order = this.retrieveById(id);
         order.setStatus(status);
@@ -58,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Transactional
     public Order create(Order order) {
         order.setDishAmountMap(new HashMap<>());
         order.setStatus(Order.Status.RECEIVED);
@@ -67,6 +70,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order submit(Long id) {
         Order order = this.retrieveById(id);
         order.setCost(this.calculateTotalCost(order.getDishAmountMap()));
@@ -74,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order addDish(Long orderId, Long dishId, Integer number) {
         Order order = this.retrieveById(orderId);
         Dish dish = this.dishService.retrieveById(dishId);
@@ -84,6 +89,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         this.orderRepository.deleteById(id);
     }
