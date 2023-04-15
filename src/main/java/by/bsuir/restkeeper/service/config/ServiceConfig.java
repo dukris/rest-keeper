@@ -34,14 +34,14 @@ public class ServiceConfig {
     }
 
     @Bean
-    public JavaMailSender getMailSender() {
+    public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(this.mailProperty.getHost());
         mailSender.setUsername(this.mailProperty.getUsername());
         mailSender.setPassword(this.mailProperty.getPassword());
         mailSender.setPort(this.mailProperty.getPort());
         Properties properties = mailSender.getJavaMailProperties();
-        properties.setProperty("mail.transport.protocol", this.mailProperty.getProtocol());
+        properties.setProperty("mail.smtp.starttls.enable", "true");
         return mailSender;
     }
 
