@@ -29,16 +29,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> retrieveAllByCriteria(UserSearchCriteria criteria) {
-        return criteria.getRole() != null ?
-                this.userRepository.findByRole(criteria.getRole()) :
-                this.userRepository.findAll();
-    }
-
-    @Override
-    public List<User> getWaiters() {
-        List<User> waiters = this.userRepository.findByRole(User.Role.ROLE_HALL);
-        waiters.forEach(waiter -> waiter.setScore(this.calculateScore(waiter)));
-        return waiters;
+        List<User> users;
+        if (criteria.getSurname() != null) {
+            users = this.userRepository.findBySurname(criteria.getSurname());
+        } else if (criteria.getRole() != null) {
+            users = this.userRepository.findByRole(criteria.getRole());
+            if (criteria.getRole() == User.Role.ROLE_HALL) {
+                users.forEach(waiter -> waiter.setScore(this.calculateScore(waiter)));
+            }
+        } else {
+            users = this.userRepository.findAll();
+        }
+        return users;
     }
 
     @Override

@@ -47,13 +47,6 @@ public class UserController {
         return this.userMapper.toDto(users);
     }
 
-    @GetMapping("/waiters")
-    @PreAuthorize("@securityExpressions.hasAdminRole()")
-    public List<UserDto> getWaiters() {
-        List<User> waiters = this.userService.getWaiters();
-        return this.userMapper.toDto(waiters);
-    }
-
     @GetMapping("/{id}")
     @PreAuthorize("@securityExpressions.isUser(#id) || @securityExpressions.hasAdminRole()")
     public UserDto getById(@PathVariable Long id) {

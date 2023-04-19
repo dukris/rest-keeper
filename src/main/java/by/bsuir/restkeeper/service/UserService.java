@@ -10,8 +10,6 @@ public interface UserService {
 
     List<User> retrieveAllByCriteria(UserSearchCriteria criteria);
 
-    List<User> getWaiters();
-
     User retrieveById(Long id);
 
     User retrieveByEmail(String email);

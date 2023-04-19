@@ -7,5 +7,6 @@ import lombok.Data;
 public class UserSearchCriteria {
 
     private User.Role role;
+    private String surname;
 
 }
