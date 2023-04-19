@@ -10,7 +10,13 @@ import by.bsuir.restkeeper.web.dto.group.OnRefresh;
 import by.bsuir.restkeeper.web.dto.group.OnRegister;
 import by.bsuir.restkeeper.web.dto.group.OnUpdatePassword;
 import by.bsuir.restkeeper.web.dto.mapper.AuthEntityMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +41,24 @@ public class AuthController {
     }
 
     @PostMapping("/login") //email, password
-    public AuthEntityDto login(@Validated(OnLogin.class) @RequestBody AuthEntityDto authEntityDto) {
+    public String login(@Validated(OnLogin.class) @RequestBody AuthEntityDto authEntityDto, HttpServletResponse response) throws JSONException {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         AuthEntity returnedAuthEntity = this.authenticationService.login(authEntity);
-        return this.authEntityMapper.toDto(returnedAuthEntity);
+        return get(returnedAuthEntity, response);
+    }
+
+    private String get(AuthEntity entity, HttpServletResponse response) throws JSONException {
+        Cookie cookie = new Cookie("refresh", entity.getRefreshToken());
+        cookie.setDomain("localhost");
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(604800);
+
+        response.addCookie(cookie);
+
+        return new JSONObject().put("accessToken", entity.getAccessToken())
+                .put("expTime", Timestamp.from(Instant.now().plusSeconds(300)).getTime())
+                .toString();
     }
 
     @PostMapping("/refresh") //refreshToken
