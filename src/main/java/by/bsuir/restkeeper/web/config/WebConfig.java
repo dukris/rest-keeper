@@ -2,6 +2,7 @@ package by.bsuir.restkeeper.web.config;
 
 
 import by.bsuir.restkeeper.web.security.filter.JwtAuthenticationFilter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @RequiredArgsConstructor
@@ -25,8 +31,10 @@ public class WebConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.cors().and().csrf().disable()
+                .httpBasic().disable()
+                .sessionManagement().sessionCreationPolicy(STATELESS)
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/restkeeper/v1/auth/users/**", "/restkeeper/v1/users/**",
@@ -51,6 +59,16 @@ public class WebConfig {
                 .authenticationProvider(this.authenticationProvider)
                 .addFilterBefore(this.jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:50659", "/**"));
+        source.registerCorsConfiguration("/**", corsConfiguration.applyPermitDefaultValues());
+        return source;
     }
 
 }
