@@ -15,7 +15,7 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
-    show-sql: true
+#    show-sql: true
   minio:
     bucket: ${MINIO_BUCKET}
     access-key: ${MINIO_USER}

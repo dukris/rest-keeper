@@ -8,6 +8,7 @@ import by.bsuir.restkeeper.domain.criteria.UserSearchCriteria;
 import by.bsuir.restkeeper.domain.exception.ResourceAlreadyExistsException;
 import by.bsuir.restkeeper.domain.exception.ResourceNotFoundException;
 import by.bsuir.restkeeper.persistence.UserRepository;
+import by.bsuir.restkeeper.service.AddressService;
 import by.bsuir.restkeeper.service.OrderService;
 import by.bsuir.restkeeper.service.StorageService;
 import by.bsuir.restkeeper.service.UserService;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final StorageService storageService;
     private final OrderService orderService;
+    private final AddressService addressService;
 
     @Override
     public List<User> retrieveAllByCriteria(UserSearchCriteria criteria) {
@@ -87,11 +89,21 @@ public class UserServiceImpl implements UserService {
         foundUser.setSurname(user.getSurname());
         foundUser.setDateOfBirth(user.getDateOfBirth());
         foundUser.setPhoneNumber(user.getPhoneNumber());
-        Address address = new Address();
-        address.setCity(user.getAddress().getCity());
-        address.setStreet(user.getAddress().getStreet());
-        address.setHouse(user.getAddress().getHouse());
-        address.setFlat(user.getAddress().getFlat());
+        foundUser.setPassport(user.getPassport());
+        Address address = foundUser.getAddress();
+        if (address == null) {
+            address = new Address();
+            address.setCity(user.getAddress().getCity());
+            address.setStreet(user.getAddress().getStreet());
+            address.setHouse(user.getAddress().getHouse());
+            address.setFlat(user.getAddress().getFlat());
+            address = this.addressService.create(address);
+        } else {
+            address.setCity(user.getAddress().getCity());
+            address.setStreet(user.getAddress().getStreet());
+            address.setHouse(user.getAddress().getHouse());
+            address.setFlat(user.getAddress().getFlat());
+        }
         foundUser.setAddress(address);
         return this.userRepository.save(foundUser);
     }

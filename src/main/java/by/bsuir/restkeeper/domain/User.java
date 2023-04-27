@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private LocalDate dateOfBirth;
 
     @Column(name = "phone_number")
-    private Integer phoneNumber;
+    private Long phoneNumber;
 
     @Column(name = "photo_path")
     private String photoPath;

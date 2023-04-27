@@ -42,6 +42,7 @@ public class DishServiceImpl implements DishService {
     public Dish update(Dish dish) {
         Dish foundDish = this.retrieveById(dish.getId());
         foundDish.setName(dish.getName());
+        foundDish.setDescription(dish.getDescription());
         foundDish.setPrice(dish.getPrice());
         foundDish.setAvailability(dish.getAvailability());
         return this.dishRepository.save(foundDish);

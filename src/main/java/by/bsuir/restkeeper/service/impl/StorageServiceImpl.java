@@ -56,6 +56,8 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public String deletePhoto(Long userId, String filename) {
         try {
+            String[] array = filename.split("/");
+            filename = array[3];
             String path = "users/" + userId + "/100/" + filename;
             this.removePhoto(path);
             path = "users/" + userId + "/400/" + filename;

@@ -67,6 +67,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Integer calculateAmountOfGuests(LocalDateTime from, LocalDateTime to) {
         List<Order> orders = this.getOrders(from, to);
+        if(orders.isEmpty()){
+            return 0;
+        }
         return orders.stream()
                 .mapToInt(Order::getAmountOfGuests)
                 .sum();

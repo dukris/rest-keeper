@@ -27,13 +27,13 @@ public record UserDto(
 
         @Null(groups = {OnCreateOrder.class}, message = "Surname should be blank!")
         @Length(groups = {OnUpdate.class}, min = 2, max = 50, message = "Surname must include minimum {min} and maximum {max} characters!")
-        @NotBlank(groups = {OnUpdate.class}, message = "Name can't be blank!")
+        @NotBlank(groups = {OnUpdate.class}, message = "Surname can't be blank!")
         String surname,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         String email,
 
-        @Null(groups = {OnCreateOrder.class}, message = "Role should be blank!")
+        @Null(groups = {OnCreateOrder.class, OnUpdate.class}, message = "Role should be blank!")
         @NotBlank(message = "Role can't be blank!")
         User.Role role,
 
@@ -49,7 +49,7 @@ public record UserDto(
         @Null(groups = {OnCreateOrder.class}, message = "Phone number should be blank!")
         @Positive(groups = {OnUpdate.class}, message = "Phone number must be positive!")
         @NotNull(groups = {OnUpdate.class},message = "Phone number can't be blank!")
-        Integer phoneNumber,
+        Long phoneNumber,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         String photoPath,

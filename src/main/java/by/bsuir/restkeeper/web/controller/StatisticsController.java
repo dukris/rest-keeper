@@ -37,7 +37,6 @@ public class StatisticsController {
     }
 
     @GetMapping("/download")
-    @PreAuthorize("@securityExpressions.hasAdminRole()")
     public ResponseEntity<Resource> download() {
         Statistics statistics = this.statisticsService.getStatistics();
         String filename = this.builder.build("report", List.of(statistics));

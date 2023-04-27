@@ -8,8 +8,8 @@ public record StatisticsDto(
         BigDecimal monthlyRevenue,
         BigDecimal averageBill,
         Integer dailyAmountOfGuests,
-        Integer morningAmountOfGuests,
-        Integer eveningAmountOfGuests,
+        Integer firstHalfAmountOfGuests,
+        Integer lastHalfAmountOfGuests,
         DishDto dailyDish
 
 ) {

@@ -21,6 +21,10 @@ public record DishDto (
         @Length(min = 2, max = 50, message = "Name of dish must include minimum {min} and maximum {max} characters!")
         String name,
 
+        @NotBlank(message = "Description of dish can't be blank!")
+        @Length(min = 2, max = 100, message = "Description of dish must include minimum {min} and maximum {max} characters!")
+        String description,
+
         @NotNull(message = "Price can't be blank!")
         @Positive(message = "Price must be positive!")
         BigDecimal price,

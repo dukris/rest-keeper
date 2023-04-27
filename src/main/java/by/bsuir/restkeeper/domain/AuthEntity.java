@@ -20,7 +20,10 @@ public class AuthEntity {
     private String newPassword;
     private String accessToken;
     private String refreshToken;
+    private Integer accessExpTim;
+    private Integer refreshExpTime;
+    private Long userId;
+    private String roleName;
     private String enableToken;
-    private String passwordRefreshToken;
 
 }

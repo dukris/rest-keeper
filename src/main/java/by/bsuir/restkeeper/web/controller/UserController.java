@@ -72,8 +72,8 @@ public class UserController {
     }
 
     @SneakyThrows
-    @PostMapping("/{id}/photos")
-    @PreAuthorize("@securityExpressions.isUser(#id)")
+    @PostMapping(value = "/{id}/photos")
+    @PreAuthorize("@securityExpressions.isUser(#id) || @securityExpressions.hasAdminRole()")
     public UserDto addPhoto(@Validated ArtifactDto artifactDto,
                             @PathVariable Long id) {
         Artifact artifact = this.artifactMapper.toEntity(artifactDto);
@@ -83,7 +83,7 @@ public class UserController {
 
     @DeleteMapping("/{id}/photos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("@securityExpressions.isUser(#id)")
+    @PreAuthorize("@securityExpressions.isUser(#id) || @securityExpressions.hasAdminRole()")
     public void deletePhoto(@PathVariable Long id,
                             @RequestParam String filename) {
         this.userService.deletePhoto(id, filename);

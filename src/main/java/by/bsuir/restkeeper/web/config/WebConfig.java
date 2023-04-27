@@ -36,6 +36,8 @@ public class WebConfig {
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeHttpRequests()
+                .requestMatchers("/restkeeper/v1/statistics/download")
+                .permitAll()
                 .requestMatchers(
                         "/restkeeper/v1/auth/users/**", "/restkeeper/v1/users/**",
                         "/restkeeper/v1/auth/addresses/**", "/restkeeper/v1/dishes/**",
@@ -66,8 +68,10 @@ public class WebConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:50659", "/**"));
-        source.registerCorsConfiguration("/**", corsConfiguration.applyPermitDefaultValues());
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200", "/**"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
 

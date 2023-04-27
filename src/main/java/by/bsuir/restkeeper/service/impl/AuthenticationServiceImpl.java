@@ -6,6 +6,7 @@ import by.bsuir.restkeeper.domain.exception.InvalidPasswordException;
 import by.bsuir.restkeeper.service.AuthenticationService;
 import by.bsuir.restkeeper.service.MailService;
 import by.bsuir.restkeeper.service.UserService;
+import by.bsuir.restkeeper.service.property.JwtProperty;
 import by.bsuir.restkeeper.service.property.RestkeeperProperty;
 import by.bsuir.restkeeper.web.security.manager.JwtManager;
 import io.jsonwebtoken.Claims;
@@ -29,6 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtManager enableJwtManager;
     private final AuthenticationManager authenticationManager;
     private final RestkeeperProperty restkeeperProperty;
+    private final JwtProperty jwtProperty;
 
     @Override
     @Transactional
@@ -63,6 +65,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthEntity.builder()
                 .accessToken(accessJwt)
                 .refreshToken(refreshJwt)
+                .accessExpTim(this.jwtProperty.getAccessExpirationTime())
+                .refreshExpTime(this.jwtProperty.getRefreshExpirationTime())
+                .userId(user.getId())
+                .roleName(user.getRole().name())
                 .build();
     }
 
@@ -81,12 +87,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public AuthEntity enable(AuthEntity authEntity) {
-        String email = this.enableJwtManager.extractClaim(authEntity.getEnableToken(), Claims::getSubject);
+    public AuthEntity enable(String enableToken) {
+        String email = this.enableJwtManager.extractClaim(enableToken, Claims::getSubject);
         User user = this.userService.enable(email);
         String accessJwt = this.accessJwtManager.generateToken(user);
         String refreshJwt = this.refreshJwtManager.generateToken(user);
         return AuthEntity.builder()
+                .name(user.getName())
+                .email(email)
                 .accessToken(accessJwt)
                 .refreshToken(refreshJwt)
                 .build();

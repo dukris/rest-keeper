@@ -31,7 +31,7 @@ public record AuthEntityDto(
         String email,
 
         @NotBlank(groups = {OnRegister.class, OnLogin.class, OnUpdatePassword.class}, message = "Password can't be blank!")
-//        @Length(min = 8, max = 20, groups = {OnRegister.class, OnLogin.class, OnUpdatePassword.class}, message = "Password must include minimum {min} and maximum {max} characters!")
+        @Length(min = 8, max = 20, groups = {OnRegister.class, OnLogin.class, OnUpdatePassword.class}, message = "Password must include minimum {min} and maximum {max} characters!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         String password,
 
@@ -54,6 +54,18 @@ public record AuthEntityDto(
 
         @NotBlank(groups = {OnRefresh.class}, message = "Refresh token can't be blank!")
         String refreshToken,
+
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        Integer accessExpTime,
+
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        Integer refreshExpTime,
+
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        Long userId,
+
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        String roleName,
 
         @NotBlank(groups = {OnEnable.class}, message = "Enable token can't be blank!")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

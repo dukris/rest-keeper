@@ -10,7 +10,7 @@ public interface AuthenticationService {
 
     AuthEntity refresh(AuthEntity authEntity);
 
-    AuthEntity enable(AuthEntity authEntity);
+    AuthEntity enable(String enableToken);
 
     AuthEntity updatePassword(Long userId, AuthEntity authEntity);
 
