@@ -21,7 +21,7 @@ public class Dish {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String description;
 
     @Column(nullable = false)

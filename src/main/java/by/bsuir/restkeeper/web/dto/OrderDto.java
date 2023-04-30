@@ -25,7 +25,7 @@ public record OrderDto(
         Integer amountOfGuests,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        Map<DishDto, Integer> dishAmountMap,
+        Map<String, Integer> dishAmountMap,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         BigDecimal cost,

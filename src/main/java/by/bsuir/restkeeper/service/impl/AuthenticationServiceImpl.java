@@ -28,8 +28,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtManager accessJwtManager;
     private final JwtManager refreshJwtManager;
     private final JwtManager enableJwtManager;
-    private final AuthenticationManager authenticationManager;
-    private final RestkeeperProperty restkeeperProperty;
+    private final AuthenticationManager authManager;
+    private final RestkeeperProperty appProperty;
     private final JwtProperty jwtProperty;
 
     @Override
@@ -46,14 +46,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user = this.userService.create(user);
         String enableJwt = this.enableJwtManager.generateToken(user);
         String subject = "Enable profile";
-        String link = this.restkeeperProperty.getEnable() + enableJwt;
+        String link = this.appProperty.getEnable() + enableJwt;
         this.mailService.send(user, "registerUser.ftl", subject, " ", link);
     }
 
     @Override
     @Transactional(readOnly = true)
     public AuthEntity login(AuthEntity authEntity) {
-        this.authenticationManager.authenticate(
+        this.authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authEntity.getEmail(),
                         authEntity.getPassword()

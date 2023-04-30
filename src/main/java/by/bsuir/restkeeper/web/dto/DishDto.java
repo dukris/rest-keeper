@@ -22,7 +22,7 @@ public record DishDto (
         String name,
 
         @NotBlank(message = "Description of dish can't be blank!")
-        @Length(min = 2, max = 100, message = "Description of dish must include minimum {min} and maximum {max} characters!")
+        @Length(min = 2, max = 200, message = "Description of dish must include minimum {min} and maximum {max} characters!")
         String description,
 
         @NotNull(message = "Price can't be blank!")

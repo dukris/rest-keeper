@@ -83,7 +83,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = this.retrieveById(orderId);
         Dish dish = this.dishService.retrieveById(dishId);
         Map<Dish, Integer> dishAmountMap = order.getDishAmountMap();
-        dishAmountMap.put(dish, number);
+        if (number == 0) {
+            dishAmountMap.remove(dish);
+        } else {
+            dishAmountMap.put(dish, number);
+        }
         order.setDishAmountMap(dishAmountMap);
         return this.orderRepository.save(order);
     }
