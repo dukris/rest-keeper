@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,6 +23,15 @@ public class AdviceController {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionDto handleResourceNotFoundException(ResourceNotFoundException ex) {
+        log.warn(ex.getMessage(), ex);
+        return ExceptionDto.builder()
+                .message(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionDto handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
                 .message(ex.getMessage())
