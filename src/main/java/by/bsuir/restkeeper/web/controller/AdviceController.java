@@ -1,27 +1,22 @@
 package by.bsuir.restkeeper.web.controller;
 
-import by.bsuir.restkeeper.domain.exception.IllegalActionException;
-import by.bsuir.restkeeper.domain.exception.InvalidPasswordException;
-import by.bsuir.restkeeper.domain.exception.MailException;
-import by.bsuir.restkeeper.domain.exception.ResourceAlreadyExistsException;
-import by.bsuir.restkeeper.domain.exception.ResourceNotFoundException;
-import by.bsuir.restkeeper.domain.exception.StorageException;
+import by.bsuir.restkeeper.domain.exception.*;
 import by.bsuir.restkeeper.web.dto.ExceptionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class AdviceController {
 
     @ExceptionHandler(ResourceNotFoundException.class)
