@@ -77,8 +77,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private List<Order> getOrders(LocalDateTime from, LocalDateTime to) {
         OrderSearchCriteria criteria = new OrderSearchCriteria();
-        criteria.setFrom(from);
-        criteria.setTo(to);
+        criteria.setFrom(from.toLocalDate());
+        criteria.setTo(to.toLocalDate());
         criteria.setStatus(Order.Status.COMPLETED);
         return this.orderService.retrieveAllByCriteria(criteria);
     }

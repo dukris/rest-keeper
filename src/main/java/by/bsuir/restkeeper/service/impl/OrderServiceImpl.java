@@ -31,11 +31,13 @@ public class OrderServiceImpl implements OrderService {
                 orderSearchCriteria.getStatus() != null) {
             return this.orderRepository.findByStatusAndTimeBetween(
                     orderSearchCriteria.getStatus(),
-                    orderSearchCriteria.getFrom(),
-                    orderSearchCriteria.getTo());
+                    orderSearchCriteria.getFrom().atStartOfDay(),
+                    orderSearchCriteria.getTo().atStartOfDay());
         }
         if (orderSearchCriteria.getFrom() != null && orderSearchCriteria.getTo() != null) {
-            return this.orderRepository.findByTimeBetween(orderSearchCriteria.getFrom(), orderSearchCriteria.getTo());
+            return this.orderRepository.findByTimeBetween(
+                    orderSearchCriteria.getFrom().atStartOfDay(),
+                    orderSearchCriteria.getTo().atStartOfDay());
         }
         if (orderSearchCriteria.getStatus() != null) {
             return this.orderRepository.findByStatus(orderSearchCriteria.getStatus());

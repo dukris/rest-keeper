@@ -2,12 +2,12 @@ package by.bsuir.restkeeper.web.dto.criteria;
 
 import by.bsuir.restkeeper.domain.Order;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record OrderSearchCriteriaDto(
 
-        LocalDateTime from,
-        LocalDateTime to,
+        LocalDate from,
+        LocalDate to,
         Order.Status status
 
 ) {

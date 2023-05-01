@@ -142,8 +142,8 @@ public class UserServiceImpl implements UserService {
 
     private Long calculateScore(User user) {
         OrderSearchCriteria criteria = new OrderSearchCriteria();
-        criteria.setFrom(LocalDate.now().atStartOfDay());
-        criteria.setTo(LocalDateTime.now());
+        criteria.setFrom(LocalDate.now());
+        criteria.setTo(LocalDateTime.now().toLocalDate());
         return this.orderService.retrieveAllByCriteria(criteria).stream()
                 .filter(order -> order.getUser().equals(user))
                 .count();
