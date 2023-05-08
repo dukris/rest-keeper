@@ -107,7 +107,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!BCrypt.checkpw(authEntity.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException("Invalid password!");
         }
-        user = this.userService.updatePassword(user, authEntity.getNewPassword());
+        user = this.userService.updatePassword(user,
+                this.passwordEncoder.encode(authEntity.getNewPassword()));
         String accessJwt = this.accessJwtManager.generateToken(user);
         String refreshJwt = this.refreshJwtManager.generateToken(user);
         return AuthEntity.builder()

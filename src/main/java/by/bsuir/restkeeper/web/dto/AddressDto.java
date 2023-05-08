@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 public record AddressDto(
 
         @Null(groups = {OnCreate.class, OnCreateOrder.class, OnUpdate.class}, message = "Id should be blank!")
-//        @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
+//        @NotNull(groups = {OnUpdate.class}, msg = "Id can't be blank!")
         Long id,
 
         @Null(groups = {OnCreateOrder.class}, message = "City should be blank!")

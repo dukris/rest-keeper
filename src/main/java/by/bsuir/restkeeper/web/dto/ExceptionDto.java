@@ -6,7 +6,7 @@ import lombok.Builder;
 public record ExceptionDto(
 
         String field,
-        String message
+        String msg
 
 ) {
 }

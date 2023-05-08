@@ -49,6 +49,11 @@ public record AuthEntityDto(
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         String newPassword,
 
+        @NotBlank(groups = {OnUpdatePassword.class}, message = "Confirm password can't be blank!")
+        @Length(min = 8, max = 20, groups = {OnUpdatePassword.class}, message = "Confirm password must include minimum {min} and maximum {max} characters!")
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        String confirmPassword,
+
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         String accessToken,
 

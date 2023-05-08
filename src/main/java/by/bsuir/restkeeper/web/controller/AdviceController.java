@@ -6,7 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,7 +28,7 @@ public class AdviceController {
     public ExceptionDto handleResourceNotFoundException(ResourceNotFoundException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -34,7 +37,16 @@ public class AdviceController {
     public ExceptionDto handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDto handleDisabledException(DisabledException ex) {
+        log.warn(ex.getMessage(), ex);
+        return ExceptionDto.builder()
+                .msg("User isn't activated!")
                 .build();
     }
 
@@ -43,7 +55,7 @@ public class AdviceController {
     public ExceptionDto handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -52,7 +64,7 @@ public class AdviceController {
     public ExceptionDto handleIOException(IOException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -61,7 +73,7 @@ public class AdviceController {
     public ExceptionDto handleIllegalActionException(IllegalActionException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -70,7 +82,7 @@ public class AdviceController {
     public ExceptionDto handleInvalidPasswordException(InvalidPasswordException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -81,7 +93,7 @@ public class AdviceController {
         return ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> ExceptionDto.builder()
                         .field(error.getObjectName() + "." + error.getField())
-                        .message(error.getDefaultMessage())
+                        .msg(error.getDefaultMessage())
                         .build())
                 .toList();
     }
@@ -91,16 +103,35 @@ public class AdviceController {
     public ExceptionDto handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDto handleBindException(BindException ex) {
+        log.warn(ex.getMessage(), ex);
+        return ExceptionDto.builder()
+                .msg(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDto handleBadCredentialsException(BadCredentialsException ex) {
+        log.warn(ex.getMessage(), ex);
+        return ExceptionDto.builder()
+                .msg("Invalid username or password!")
+                .build();
+    }
+
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ExceptionDto handleAccessDeniedException(AccessDeniedException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -109,7 +140,7 @@ public class AdviceController {
     public ExceptionDto handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         log.warn(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -118,7 +149,7 @@ public class AdviceController {
     public ExceptionDto handleMailException(MailException ex) {
         log.error(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -127,7 +158,7 @@ public class AdviceController {
     public ExceptionDto handleStorageException(StorageException ex) {
         log.error(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message(ex.getMessage())
+                .msg(ex.getMessage())
                 .build();
     }
 
@@ -136,7 +167,7 @@ public class AdviceController {
     public ExceptionDto handleOtherExceptions(Exception ex) {
         log.error(ex.getMessage(), ex);
         return ExceptionDto.builder()
-                .message("Please, try later!")
+                .msg("Please, try later!")
                 .build();
     }
 

@@ -11,6 +11,7 @@ import by.bsuir.restkeeper.service.builder.Builder;
 import by.bsuir.restkeeper.service.scheduler.Scheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class MailScheduler implements Scheduler {
     private final Builder builder;
 
     @Override
-//    @Scheduled(fixedDelay = 86400000) //24h
+    @Scheduled(fixedDelay = 86400000) //24h
     public void schedule() {
         Statistics statistics = this.statisticsService.getStatistics();
         String filename = this.builder.build("report", List.of(statistics));

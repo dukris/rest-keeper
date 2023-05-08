@@ -18,6 +18,7 @@ public class AuthEntity {
     private User.Role role;
     private String passport;
     private String newPassword;
+    private String confirmPassword;
     private String accessToken;
     private String refreshToken;
     private Integer accessExpTim;
