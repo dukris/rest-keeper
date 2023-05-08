@@ -80,7 +80,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         criteria.setFrom(from.toLocalDate());
         criteria.setTo(to.toLocalDate());
         criteria.setStatus(Order.Status.COMPLETED);
-        return this.orderService.retrieveAllByCriteria(criteria);
+        return this.orderService.retrieveAllByPeriod(from, to, Order.Status.COMPLETED);
     }
 
     private Dish getPopularDish() {

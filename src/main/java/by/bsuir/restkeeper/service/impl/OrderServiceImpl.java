@@ -47,6 +47,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> retrieveAllByPeriod(LocalDateTime from, LocalDateTime to, Order.Status status) {
+        return orderRepository.findByStatusAndTimeBetween(status, from, to);
+    }
+
+    @Override
     public Order retrieveById(Long id) {
         return this.orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order with id = " + id + " not found!"));
