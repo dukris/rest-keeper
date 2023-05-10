@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - 5435:5432
+    networks:
+      - restkeeper
+    environment:
+      - POSTGRES_USER=${DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${DATASOURCE_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+      - ./src/main/resources/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  app:
+    build: .
+    container_name: restkeeper
+    ports:
+      - 8080:8080
+    networks:
+      - restkeeper
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  restkeeper:
+    driver: bridge
