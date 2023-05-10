@@ -5,7 +5,7 @@
 
 Project architect: [@hizmailovich](https://github.com/hizmailovich)
 
-Smart and elegant system for restaurants "RestKeeper"
+Smart and elegant system for restaurants "RestKeeper" [Backend].
 
 **Problem:** Currently, the restaurant business is developing quite rapidly. As a result, the competition between establishments increases, hence the competition for potential visitors, which entails an increase in the requirements for business strategy.
 
