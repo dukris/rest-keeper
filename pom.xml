@@ -153,7 +153,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>com.solvd.laba.sinder.SinderApplication</mainClass>
+          <mainClass>by.bsuir.restkeeper.RestkeeperApplication</mainClass>
           <layout>JAR</layout>
         </configuration>
       </plugin>
