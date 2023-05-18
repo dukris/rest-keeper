@@ -22,7 +22,7 @@ jobs:
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          image: ${{secrets.DOCKER_USER}}/restkeeper
+          image: ${{secrets.DOCKER_USER}}/restkeeper-backend
           tags: latest
           dockerfile: Dockerfile
           registry: docker.io

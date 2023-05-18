@@ -14,19 +14,31 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
       - ./src/main/resources/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  minio:
+    env_file: .env
+    image: minio/minio
+    container_name: minio
+    command: server --console-address ":9001" /data/
+    networks:
+      - restkeeper
+    volumes:
+      - minio-data:/data
   app:
     build: .
-    container_name: restkeeper
+    container_name: restkeeper-backend
     ports:
       - 8080:8080
     networks:
       - restkeeper
     depends_on:
       - postgres
+      - minio
     env_file:
       - ./.env
 
 volumes:
+  minio-data:
+    driver: local
   pgdata:
     driver: local
 
