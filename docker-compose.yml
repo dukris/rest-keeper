@@ -5,7 +5,7 @@ services:
     image: postgres:15-alpine
     container_name: postgres
     ports:
-      - 5435:5432
+      - "5435:5432"
     networks:
       - restkeeper
     environment:
@@ -13,7 +13,6 @@ services:
       - POSTGRES_PASSWORD=${DATASOURCE_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data/
-      - ./src/main/resources/db/init.sql:/docker-entrypoint-initdb.d/init.sql
   minio:
     env_file: .env
     image: minio/minio
@@ -23,11 +22,11 @@ services:
       - restkeeper
     volumes:
       - minio-data:/data
-  app:
+  backend:
     build: .
     container_name: restkeeper-backend
     ports:
-      - 8080:8080
+      - "8080:8080"
     networks:
       - restkeeper
     depends_on:
@@ -35,6 +34,13 @@ services:
       - minio
     env_file:
       - ./.env
+  frontend:
+    image: hizmailovich/restkeeper-frontend
+    container_name: restkeeper-frontend
+    ports:
+      - "4200:4200"
+    networks:
+      - restkeeper
 
 volumes:
   minio-data:
