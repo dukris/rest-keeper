@@ -14,7 +14,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
   minio:
-    env_file: .env
     image: minio/minio
     container_name: minio
     command: server --console-address ":9001" /data/
@@ -22,8 +21,9 @@ services:
       - restkeeper
     volumes:
       - minio-data:/data
+    env_file: .env
   backend:
-    build: .
+    image: hizmailovich/restkeeper-backend
     container_name: restkeeper-backend
     ports:
       - "8080:8080"
@@ -32,8 +32,7 @@ services:
     depends_on:
       - postgres
       - minio
-    env_file:
-      - ./.env
+    env_file: .env
   frontend:
     image: hizmailovich/restkeeper-frontend
     container_name: restkeeper-frontend
