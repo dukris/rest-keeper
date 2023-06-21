@@ -22,7 +22,7 @@ public class BirthdayScheduler implements Scheduler {
     private final MailService mailService;
 
     @Override
-    @Scheduled(fixedDelay = 86400000) //24h
+    @Scheduled(fixedDelay = 86400000)
     public void schedule() {
         List<User> users = this.userService.retrieveAllByCriteria(
                 new UserSearchCriteria());

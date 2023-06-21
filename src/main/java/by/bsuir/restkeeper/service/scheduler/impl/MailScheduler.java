@@ -28,7 +28,7 @@ public class MailScheduler implements Scheduler {
     private final Builder builder;
 
     @Override
-    @Scheduled(fixedDelay = 86400000) //24h
+    @Scheduled(fixedDelay = 86400000)
     public void schedule() {
         Statistics statistics = this.statisticsService.getStatistics();
         String filename = this.builder.build("report", List.of(statistics));
