@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
     <relativePath/>
   </parent>
   <groupId>by.bsuir</groupId>
@@ -23,6 +23,7 @@
     <io.minio.version>8.5.1</io.minio.version>
     <org.jooq.version>0.9.15</org.jooq.version>
     <org.apache.commons.version>1.10.0</org.apache.commons.version>
+    <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
     <jwt.version>0.11.5</jwt.version>
   </properties>
   <dependencies>
@@ -161,6 +162,21 @@
           <mainClass>by.bsuir.restkeeper.RestkeeperApplication</mainClass>
           <layout>JAR</layout>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <configuration>
+          <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
