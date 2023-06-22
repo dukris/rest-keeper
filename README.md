@@ -19,6 +19,33 @@ Run this script to start containers locally:
 $ sh local.sh
 ```
 
+## Screenshots
+
+Start page:
+<br>
+
+![home.png](docs/home.png)
+
+Profile page:
+<br>
+
+![profile.png](docs/profile.png)
+
+Dishes page:
+<br>
+
+![dishes.png](docs/dishes.png)
+
+Orders page:
+<br>
+
+![orders.png](docs/orders.png)
+
+Statistics page:
+<br>
+
+![statistics.png](docs/statistics.png)
+
 ## Glossary
 `Address` - information about user's address.
 
