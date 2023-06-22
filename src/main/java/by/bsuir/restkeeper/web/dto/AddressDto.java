@@ -11,26 +11,34 @@ import org.hibernate.validator.constraints.Length;
 
 public record AddressDto(
 
-        @Null(groups = {OnCreate.class, OnCreateOrder.class, OnUpdate.class}, message = "Id should be blank!")
-//        @NotNull(groups = {OnUpdate.class}, msg = "Id can't be blank!")
+        @Null(
+                groups = {OnCreate.class, OnCreateOrder.class, OnUpdate.class},
+                message = "Id should be blank!"
+        )
         Long id,
 
-//        @Null(groups = {OnCreateOrder.class}, message = "City should be blank!")
         @NotBlank(message = "City can't be blank!")
-        @Length(min = 2, max = 50, message = "City must include minimum {min} and maximum {max} characters!")
+        @Length(
+                min = 2,
+                max = 50,
+                message = "City must include minimum "
+                        + "{min} and maximum {max} characters!"
+        )
         String city,
 
-//        @Null(groups = {OnCreateOrder.class}, message = "Street should be blank!")
         @NotBlank(message = "Street can't be blank!")
-        @Length(min = 2, max = 50, message = "Street must include minimum {min} and maximum {max} characters!")
+        @Length(
+                min = 2,
+                max = 50,
+                message = "Street must include minimum "
+                        + "{min} and maximum {max} characters!"
+        )
         String street,
 
-//        @Null(groups = {OnCreateOrder.class}, message = "House should be blank!")
         @NotNull(message = "House can't be blank!")
         @Positive(message = "House must be positive!")
         Integer house,
 
-//        @Null(groups = {OnCreateOrder.class}, message = "Flat should be blank!")
         @Positive(message = "Flat must be positive!")
         Integer flat
 

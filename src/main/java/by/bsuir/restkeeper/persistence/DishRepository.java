@@ -7,6 +7,12 @@ import java.util.List;
 
 public interface DishRepository extends JpaRepository<Dish, Long> {
 
+    /**
+     * Find dishes be availability.
+     *
+     * @param availability Availability
+     * @return List of dish
+     */
     List<Dish> findByAvailability(Boolean availability);
 
 }

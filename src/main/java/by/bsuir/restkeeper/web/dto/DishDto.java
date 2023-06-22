@@ -11,18 +11,33 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
-public record DishDto (
+public record DishDto(
 
-        @Null(groups = {OnCreate.class, OnCreateOrder.class}, message = "Id should be blank!")
-        @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
+        @Null(
+                groups = {OnCreate.class, OnCreateOrder.class},
+                message = "Id should be blank!"
+        )
+        @NotNull(
+                groups = {OnUpdate.class},
+                message = "Id can't be blank!"
+        )
         Long id,
 
         @NotBlank(message = "Name of dish can't be blank!")
-        @Length(min = 2, max = 50, message = "Name of dish must include minimum {min} and maximum {max} characters!")
+        @Length(min = 2,
+                max = 50,
+                message = "Name of dish must include minimum "
+                        + "{min} and maximum {max} characters!"
+        )
         String name,
 
         @NotBlank(message = "Description of dish can't be blank!")
-        @Length(min = 2, max = 200, message = "Description of dish must include minimum {min} and maximum {max} characters!")
+        @Length(
+                min = 2,
+                max = 200,
+                message = "Description of dish must include minimum "
+                        + "{min} and maximum {max} characters!"
+        )
         String description,
 
         @NotNull(message = "Price can't be blank!")

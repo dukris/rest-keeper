@@ -28,7 +28,9 @@ public class BirthdayScheduler implements Scheduler {
                 new UserSearchCriteria());
         users.forEach(user -> {
             if (user.getDateOfBirth() != null
-                    && MonthDay.now().equals(MonthDay.from(user.getDateOfBirth()))) {
+                    && MonthDay.now().equals(
+                    MonthDay.from(user.getDateOfBirth()))
+            ) {
                 mailService.send(
                         user,
                         "birthday.ftl",

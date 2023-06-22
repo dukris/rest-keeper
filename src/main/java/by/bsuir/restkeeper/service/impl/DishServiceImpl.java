@@ -18,28 +18,37 @@ public class DishServiceImpl implements DishService {
     private final DishRepository dishRepository;
 
     @Override
-    public List<Dish> retrieveAllByCriteria(DishSearchCriteria criteria) {
-        return criteria.getAvailability() != null ?
-                this.dishRepository.findByAvailability(criteria.getAvailability()) :
-                this.dishRepository.findAll();
+    public List<Dish> retrieveAllByCriteria(
+            final DishSearchCriteria criteria
+    ) {
+        if (criteria.getAvailability() != null) {
+            return this.dishRepository.findByAvailability(
+                    criteria.getAvailability()
+            );
+        } else {
+            return this.dishRepository.findAll();
+        }
     }
 
 
     @Override
-    public Dish retrieveById(Long id) {
+    public Dish retrieveById(final Long id) {
         return this.dishRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Dish with id = " + id + " not found!"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Dish with id = " + id + " not found!")
+                );
     }
 
     @Override
     @Transactional
-    public Dish create(Dish dish) {
+    public Dish create(final Dish dish) {
         return this.dishRepository.save(dish);
     }
 
     @Override
     @Transactional
-    public Dish update(Dish dish) {
+    public Dish update(final Dish dish) {
         Dish foundDish = this.retrieveById(dish.getId());
         foundDish.setName(dish.getName());
         foundDish.setDescription(dish.getDescription());
@@ -50,7 +59,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(final Long id) {
         this.dishRepository.deleteById(id);
     }
 }

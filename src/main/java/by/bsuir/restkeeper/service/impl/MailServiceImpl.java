@@ -27,9 +27,15 @@ public class MailServiceImpl implements MailService {
 
     @Override
     @SneakyThrows
-    public void send(User user, String template, String subject, String filename, String link) {
+    public void send(final User user,
+                     final String template,
+                     final String subject,
+                     final String filename,
+                     final String link
+    ) {
         MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        MimeMessageHelper helper =
+                new MimeMessageHelper(mimeMessage, true);
         helper.setSubject(subject);
         helper.setFrom(this.mailProperty.getUsername());
         helper.setTo(user.getEmail());
@@ -42,7 +48,11 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private String getContent(User user, String template, String link) {
+    private String getContent(
+            final User user,
+            final String template,
+            final String link
+    ) {
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> model = new HashMap<>();
         model.put("user", user);

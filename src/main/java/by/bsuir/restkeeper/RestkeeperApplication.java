@@ -8,8 +8,13 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 public class RestkeeperApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RestkeeperApplication.class, args);
-	}
+    /**
+     * Application start.
+     *
+     * @param args Application args
+     */
+    public static void main(final String[] args) {
+        SpringApplication.run(RestkeeperApplication.class, args);
+    }
 
 }

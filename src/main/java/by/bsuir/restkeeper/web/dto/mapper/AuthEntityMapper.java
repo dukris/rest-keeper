@@ -5,10 +5,7 @@ import by.bsuir.restkeeper.web.dto.AuthEntityDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface AuthEntityMapper {
-
-    AuthEntity toEntity(AuthEntityDto dto);
-
-    AuthEntityDto toDto(AuthEntity entity);
+public interface AuthEntityMapper
+        extends ObjectMapper<AuthEntity, AuthEntityDto> {
 
 }

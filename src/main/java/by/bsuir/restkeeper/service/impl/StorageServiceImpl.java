@@ -31,20 +31,32 @@ public class StorageServiceImpl implements StorageService {
     private final MinioProperty minioProperty;
 
     @Override
-    public String uploadPhoto(Long userId, Artifact photo) {
+    public String uploadPhoto(
+            final Long userId,
+            final Artifact photo
+    ) {
         try {
             this.createBucket();
             CompletableFuture<Void> allFutures = CompletableFuture.allOf(
                     CompletableFuture.runAsync(() -> {
-                        String path = "users/" + userId + "/100/" + photo.getFilename();
-                        this.savePhoto(path, this.generateThumbnail(photo, 100));
+                        String path = "users/" + userId
+                                + "/100/" + photo.getFilename();
+                        this.savePhoto(
+                                path,
+                                this.generateThumbnail(photo, 100)
+                        );
                     }),
                     CompletableFuture.runAsync(() -> {
-                        String path = "users/" + userId + "/400/" + photo.getFilename();
-                        this.savePhoto(path, this.generateThumbnail(photo, 400));
+                        String path = "users/" + userId
+                                + "/400/" + photo.getFilename();
+                        this.savePhoto(
+                                path,
+                                this.generateThumbnail(photo, 400)
+                        );
                     })
             );
-            String path = "users/" + userId + "/original/" + photo.getFilename();
+            String path = "users/" + userId
+                    + "/original/" + photo.getFilename();
             this.savePhoto(path, new ByteArrayInputStream(photo.getBytes()));
             allFutures.get();
             return path;
@@ -54,15 +66,18 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String deletePhoto(Long userId, String filename) {
+    public String deletePhoto(
+            final Long userId,
+            final String filename
+    ) {
         try {
             String[] array = filename.split("/");
-            filename = array[3];
-            String path = "users/" + userId + "/100/" + filename;
+            String fileName = array[3];
+            String path = "users/" + userId + "/100/" + fileName;
             this.removePhoto(path);
-            path = "users/" + userId + "/400/" + filename;
+            path = "users/" + userId + "/400/" + fileName;
             this.removePhoto(path);
-            path = "users/" + userId + "/original/" + filename;
+            path = "users/" + userId + "/original/" + fileName;
             this.removePhoto(path);
             return path;
         } catch (StorageException e) {
@@ -74,9 +89,11 @@ public class StorageServiceImpl implements StorageService {
 
     @SneakyThrows
     private void createBucket() {
-        boolean found = this.minioClient.bucketExists(BucketExistsArgs.builder()
+        boolean found = this.minioClient.bucketExists(
+                BucketExistsArgs.builder()
                 .bucket(this.minioProperty.getBucket())
-                .build());
+                .build()
+        );
         if (!found) {
             this.minioClient.makeBucket(MakeBucketArgs.builder()
                     .bucket(this.minioProperty.getBucket())
@@ -85,7 +102,10 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @SneakyThrows
-    private void savePhoto(String path, InputStream inputStream) {
+    private void savePhoto(
+            final String path,
+            final InputStream inputStream
+    ) {
         this.minioClient.putObject(PutObjectArgs.builder()
                 .bucket(this.minioProperty.getBucket())
                 .object(path)
@@ -94,7 +114,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @SneakyThrows
-    private void removePhoto(String path) {
+    private void removePhoto(final String path) {
         this.minioClient.removeObject(RemoveObjectArgs.builder()
                 .bucket(this.minioProperty.getBucket())
                 .object(path)
@@ -102,10 +122,16 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @SneakyThrows
-    private InputStream generateThumbnail(Artifact photo, Integer height) {
+    private InputStream generateThumbnail(
+            final Artifact photo,
+            final Integer height
+    ) {
         String extension = FileNameUtils.getExtension(photo.getFilename());
-        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(photo.getBytes()));
-        Thumbnails.Builder<BufferedImage> builder = Thumbnails.of(originalImage)
+        BufferedImage originalImage = ImageIO.read(
+                new ByteArrayInputStream(photo.getBytes())
+        );
+        Thumbnails.Builder<BufferedImage> builder =
+                Thumbnails.of(originalImage)
                 .height(height)
                 .outputFormat(extension);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

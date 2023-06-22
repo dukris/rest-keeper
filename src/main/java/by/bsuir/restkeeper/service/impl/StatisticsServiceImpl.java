@@ -29,21 +29,34 @@ public class StatisticsServiceImpl implements StatisticsService {
     public Statistics getStatistics() {
         Statistics statistics = new Statistics();
         statistics.setDailyRevenue(this.calculateRevenue(
-                LocalDate.now().atStartOfDay(), LocalDateTime.now()));
+                LocalDate.now().atStartOfDay(),
+                LocalDateTime.now())
+        );
         statistics.setMonthlyRevenue(this.calculateRevenue(
-                YearMonth.now().atDay(1).atStartOfDay(), LocalDateTime.now()));
+                YearMonth.now().atDay(1).atStartOfDay(),
+                LocalDateTime.now())
+        );
         statistics.setAverageBill(this.getAverageBill());
         statistics.setDailyAmountOfGuests(this.calculateAmountOfGuests(
-                LocalDate.now().atStartOfDay(), LocalDateTime.now()));
+                LocalDate.now().atStartOfDay(),
+                LocalDateTime.now())
+        );
         statistics.setFirstHalfAmountOfGuests(this.calculateAmountOfGuests(
-                LocalDate.now().atStartOfDay(), LocalDate.now().atTime(15, 0)));
+                LocalDate.now().atStartOfDay(),
+                LocalDate.now().atTime(15, 0))
+        );
         statistics.setLastHalfAmountOfGuests(this.calculateAmountOfGuests(
-                LocalDate.now().atTime(15, 0), LocalDate.now().atTime(23, 59)));
+                LocalDate.now().atTime(15, 0),
+                LocalDate.now().atTime(23, 59))
+        );
         statistics.setDailyDish(this.getPopularDish());
         return statistics;
     }
 
-    private BigDecimal calculateRevenue(LocalDateTime from, LocalDateTime to) {
+    private BigDecimal calculateRevenue(
+            final LocalDateTime from,
+            final LocalDateTime to
+    ) {
         List<Order> orders = this.getOrders(from, to);
         return orders.stream()
                 .map(Order::getCost)
@@ -51,7 +64,10 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     private BigDecimal getAverageBill() {
-        BigDecimal sum = this.calculateRevenue(LocalDate.now().atStartOfDay(), LocalDateTime.now());
+        BigDecimal sum = this.calculateRevenue(
+                LocalDate.now().atStartOfDay(),
+                LocalDateTime.now()
+        );
         BigDecimal amount = new BigDecimal(this.getDailyAmountOfOrders());
         if (amount.equals(BigDecimal.ZERO)) {
             return amount;
@@ -61,13 +77,18 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Integer getDailyAmountOfOrders() {
         List<Order> orders = this.getOrders(
-                LocalDate.now().atStartOfDay(), LocalDateTime.now());
+                LocalDate.now().atStartOfDay(),
+                LocalDateTime.now()
+        );
         return orders.size();
     }
 
-    private Integer calculateAmountOfGuests(LocalDateTime from, LocalDateTime to) {
+    private Integer calculateAmountOfGuests(
+            final LocalDateTime from,
+            final LocalDateTime to
+    ) {
         List<Order> orders = this.getOrders(from, to);
-        if(orders.isEmpty()){
+        if (orders.isEmpty()) {
             return 0;
         }
         return orders.stream()
@@ -75,12 +96,19 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .sum();
     }
 
-    private List<Order> getOrders(LocalDateTime from, LocalDateTime to) {
+    private List<Order> getOrders(
+            final LocalDateTime from,
+            final LocalDateTime to
+    ) {
         OrderSearchCriteria criteria = new OrderSearchCriteria();
         criteria.setFrom(from.toLocalDate());
         criteria.setTo(to.toLocalDate());
         criteria.setStatus(Order.Status.COMPLETED);
-        return this.orderService.retrieveAllByPeriod(from, to, Order.Status.COMPLETED);
+        return this.orderService.retrieveAllByPeriod(
+                from,
+                to,
+                Order.Status.COMPLETED
+        );
     }
 
     private Dish getPopularDish() {

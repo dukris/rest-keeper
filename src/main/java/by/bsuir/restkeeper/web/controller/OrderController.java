@@ -39,30 +39,60 @@ public class OrderController {
     private final CreateOrderMapper createOrderMapper;
     private final OrderSearchCriteriaMapper orderSearchCriteriaMapper;
 
-    @GetMapping //statistics: list of orders by period of time, by status
-    public List<OrderDto> getAllByCriteria(OrderSearchCriteriaDto criteriaDto) {
-        OrderSearchCriteria criteria = this.orderSearchCriteriaMapper.toEntity(criteriaDto);
+    /**
+     * Get all orders.
+     *
+     * @param criteriaDto Criteria
+     * @return List of orders
+     */
+    @GetMapping
+    public List<OrderDto> getAllByCriteria(
+            final OrderSearchCriteriaDto criteriaDto
+    ) {
+        OrderSearchCriteria criteria =
+                this.orderSearchCriteriaMapper.toEntity(criteriaDto);
         List<Order> orders = this.orderService.retrieveAllByCriteria(criteria);
         return this.orderMapper.toDto(orders);
     }
 
+    /**
+     * Get order by id.
+     *
+     * @param id Id
+     * @return Order
+     */
     @GetMapping("/{id}")
-    public OrderDto getById(@PathVariable Long id) {
+    public OrderDto getById(@PathVariable final Long id) {
         Order order = this.orderService.retrieveById(id);
         return this.orderMapper.toDto(order);
     }
 
-    @PostMapping("/{id}/status") //change status only
-    public OrderDto changeStatus(@PathVariable Long id,
-                                 @RequestParam Order.Status status) {
+    /**
+     * Change status of order.
+     *
+     * @param id Id
+     * @param status Status
+     * @return List of orders
+     */
+    @PostMapping("/{id}/status")
+    public OrderDto changeStatus(@PathVariable final Long id,
+                                 @RequestParam final Order.Status status) {
         Order order = this.orderService.changeStatus(id, status);
         return this.orderMapper.toDto(order);
     }
 
-    @PostMapping//create order with tableNumber, guests and userId: set time, status
+    /**
+     * Create new order.
+     *
+     * @param orderDto Order
+     * @return Order
+     */
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("@securityExpressions.hasHallRole() || @securityExpressions.hasAdminRole()")
-    public OrderDto create(@Validated(OnCreateOrder.class) @RequestBody CreateOrderDto orderDto) {
+    @PreAuthorize("@securityExpressions.hasHallRole() "
+            + "|| @securityExpressions.hasAdminRole()")
+    public OrderDto create(@Validated(OnCreateOrder.class)
+                           @RequestBody final CreateOrderDto orderDto) {
         Order order = this.createOrderMapper.toEntity(orderDto);
         User user = this.userService.retrieveById(order.getUser().getId());
         order.setUser(user);
@@ -70,26 +100,46 @@ public class OrderController {
         return this.orderMapper.toDto(order);
     }
 
-    @PostMapping("/{orderId}/dishes/{dishId}") //add dishes
-    public OrderDto addDish(@PathVariable Long orderId,
-                            @PathVariable Long dishId,
-                            @RequestParam Integer amount) {
+    /**
+     * Add new dish.
+     *
+     * @param orderId Order's id
+     * @param dishId  Dish's id
+     * @param amount Amount of dishes
+     * @return Order
+     */
+    @PostMapping("/{orderId}/dishes/{dishId}")
+    public OrderDto addDish(@PathVariable final Long orderId,
+                            @PathVariable final Long dishId,
+                            @RequestParam final Integer amount) {
         Order order = this.orderService.addDish(orderId, dishId, amount);
         return this.orderMapper.toDto(order);
     }
 
-
-    @PostMapping("/{id}") //submit order: set cost
-    @PreAuthorize("@securityExpressions.hasHallRole() || @securityExpressions.hasAdminRole()")
-    public OrderDto submit(@PathVariable Long id) {
+    /**
+     * Submit order.
+     *
+     * @param id Id
+     * @return Order
+     */
+    @PostMapping("/{id}")
+    @PreAuthorize("@securityExpressions.hasHallRole() "
+            + "|| @securityExpressions.hasAdminRole()")
+    public OrderDto submit(@PathVariable final Long id) {
         Order order = this.orderService.submit(id);
         return this.orderMapper.toDto(order);
     }
 
+    /**
+     * Delete order.
+     *
+     * @param id Id
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("@securityExpressions.hasHallRole() || @securityExpressions.hasAdminRole()")
-    public void delete(@PathVariable Long id) {
+    @PreAuthorize("@securityExpressions.hasHallRole() "
+            + "|| @securityExpressions.hasAdminRole()")
+    public void delete(@PathVariable final Long id) {
         this.orderService.delete(id);
     }
 

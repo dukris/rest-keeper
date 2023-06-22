@@ -18,26 +18,49 @@ public class AuthenticationConfig {
 
     private final UserService userService;
 
+    /**
+     * Create UserDetailsService.
+     *
+     * @return UserDetailsService
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         return this.userService::retrieveByEmail;
     }
 
+    /**
+     * Create AuthenticationProvider.
+     *
+     * @return AuthenticationProvider
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authProvider =
+                new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(this.userDetailsService());
         authProvider.setPasswordEncoder(this.passwordEncoder());
         return authProvider;
     }
 
+    /**
+     * Create PasswordEncoder.
+     *
+     * @return PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Create AuthenticationManager.
+     *
+     * @param config AuthenticationConfiguration
+     * @return AuthenticationManager
+     */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(
+            final AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 

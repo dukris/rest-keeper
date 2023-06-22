@@ -45,6 +45,4 @@ $ mvn clean install
 
 You will need Maven 3.8.7+ and Java 17+.
 
-If you want to contribute to the next release version of `restkeeper`, please check the [project board](https://letsrally.atlassian.net/jira/software/projects/NVEDW/boards/4).
-
 Our [rultor image](https://github.com/eo-cqrs/eo-kafka-rultor-image) for CI/CD.

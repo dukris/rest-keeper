@@ -21,18 +21,30 @@ public class ServiceConfig {
     private final MinioProperty minioProperty;
     private final MailProperty mailProperty;
 
+    /**
+     * Create MinioClient.
+     *
+     * @return MinioClient
+     */
     @Bean
     public MinioClient minioClient() {
         try {
             return MinioClient.builder()
                     .endpoint(this.minioProperty.getUrl())
-                    .credentials(this.minioProperty.getAccessKey(), this.minioProperty.getSecretKey())
-                    .build();
+                    .credentials(
+                            this.minioProperty.getAccessKey(),
+                            this.minioProperty.getSecretKey()
+                    ).build();
         } catch (Exception e) {
             throw new StorageException("Unable to connect to minio!");
         }
     }
 
+    /**
+     * Create JavaMailSender.
+     *
+     * @return JavaMailSender
+     */
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

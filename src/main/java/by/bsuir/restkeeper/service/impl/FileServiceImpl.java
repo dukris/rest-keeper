@@ -14,13 +14,13 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @SneakyThrows
-    public ByteArrayResource download(String filename) {
+    public ByteArrayResource download(final String filename) {
         byte[] bytes = Files.readAllBytes(Paths.get(filename));
         return new ByteArrayResource(bytes);
     }
 
     @Override
-    public void delete(String filename) {
+    public void delete(final String filename) {
         new File(filename).delete();
     }
 

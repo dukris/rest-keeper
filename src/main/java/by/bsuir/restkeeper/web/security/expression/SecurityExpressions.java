@@ -15,34 +15,73 @@ public class SecurityExpressions {
 
     private final UserService userService;
 
-    public boolean isUser(Long userId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    /**
+     * Check user's id.
+     *
+     * @param userId id
+     * @return Boolean
+     */
+    public boolean isUser(final Long userId) {
+        Authentication authentication
+                = SecurityContextHolder.getContext().getAuthentication();
         User user = this.userService.retrieveById(userId);
-        return authentication.getName().equals(user.getEmail()) && user.isEnabled();
+        return authentication.getName().equals(user.getEmail())
+                && user.isEnabled();
     }
 
+    /**
+     * Check admin role.
+     *
+     * @return Boolean
+     */
     public boolean hasAdminRole() {
         return this.hasRole(User.Role.ROLE_ADMIN);
     }
 
+    /**
+     * Check kitchen role.
+     *
+     * @return Boolean
+     */
     public boolean hasKitchenRole() {
         return this.hasRole(User.Role.ROLE_KITCHEN);
     }
 
+    /**
+     * Check hall role.
+     *
+     * @return Boolean
+     */
     public boolean hasHallRole() {
         return this.hasRole(User.Role.ROLE_HALL);
     }
 
-    private boolean hasRole(User.Role role) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        GrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+    /**
+     * Check role.
+     *
+     * @param role Role
+     * @return Boolean
+     */
+    private boolean hasRole(final User.Role role) {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        GrantedAuthority authority =
+                new SimpleGrantedAuthority(role.name());
         return authentication.getAuthorities().contains(authority);
     }
 
-    public boolean hasAddress(Long addressId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    /**
+     * Check address.
+     *
+     * @param addressId Id
+     * @return Boolean
+     */
+    public boolean hasAddress(final Long addressId) {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
         User user = this.userService.retrieveByEmail(authentication.getName());
-        return user.getAddress() != null && addressId.equals(user.getAddress().getId());
+        return user.getAddress() != null
+                && addressId.equals(user.getAddress().getId());
     }
 
 }

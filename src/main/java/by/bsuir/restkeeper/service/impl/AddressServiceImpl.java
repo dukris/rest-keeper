@@ -15,20 +15,24 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Override
-    public Address retrieveById(Long id) {
+    public Address retrieveById(final Long id) {
         return this.addressRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Address with id = " + id + " not found!"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Address with id = " + id + " not found!"
+                        )
+                );
     }
 
     @Override
     @Transactional
-    public Address create(Address address) {
+    public Address create(final Address address) {
         return this.addressRepository.save(address);
     }
 
     @Override
     @Transactional
-    public Address update(Address address) {
+    public Address update(final Address address) {
         Address foundAddress = this.retrieveById(address.getId());
         foundAddress.setCity(address.getCity());
         foundAddress.setStreet(address.getStreet());
@@ -39,7 +43,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(final Long id) {
         this.addressRepository.deleteById(id);
     }
 }

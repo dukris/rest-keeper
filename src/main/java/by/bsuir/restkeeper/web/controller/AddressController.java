@@ -28,34 +28,61 @@ public class AddressController {
     private final AddressService addressService;
     private final AddressMapper addressMapper;
 
+    /**
+     * Get address by id.
+     *
+     * @param id Id
+     * @return Address
+     */
     @GetMapping("/{id}")
-    @PreAuthorize("@securityExpressions.hasAddress(#id) || @securityExpressions.hasAdminRole()")
-    public AddressDto getById(@PathVariable Long id) {
+    @PreAuthorize("@securityExpressions.hasAddress(#id) "
+            + "|| @securityExpressions.hasAdminRole()")
+    public AddressDto getById(@PathVariable final Long id) {
         Address address = this.addressService.retrieveById(id);
         return this.addressMapper.toDto(address);
     }
 
+    /**
+     * Create address.
+     *
+     * @param addressDto Address
+     * @return Address
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AddressDto create(@Validated(OnCreate.class) @RequestBody AddressDto addressDto) {
+    public AddressDto create(@Validated(OnCreate.class)
+                             @RequestBody final AddressDto addressDto) {
         Address address = this.addressMapper.toEntity(addressDto);
         address = this.addressService.create(address);
         return this.addressMapper.toDto(address);
     }
 
+    /**
+     * Update address.
+     *
+     * @param id         Id
+     * @param addressDto Address
+     * @return Address
+     */
     @PutMapping("/{id}")
     @PreAuthorize("@securityExpressions.hasAddress(#id)")
-    public AddressDto update(@PathVariable Long id,
-                             @Validated(OnUpdate.class) @RequestBody AddressDto addressDto) {
+    public AddressDto update(@PathVariable final Long id,
+                             @Validated(OnUpdate.class)
+                             @RequestBody final AddressDto addressDto) {
         Address address = this.addressMapper.toEntity(addressDto);
         address = this.addressService.update(address);
         return this.addressMapper.toDto(address);
     }
 
+    /**
+     * Delete address.
+     *
+     * @param id Id
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("@securityExpressions.hasAddress(#id)")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable final Long id) {
         this.addressService.delete(id);
     }
 

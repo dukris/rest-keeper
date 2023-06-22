@@ -1,8 +1,14 @@
 package by.bsuir.restkeeper.domain.exception;
 
-public class InvalidPasswordException extends RuntimeException{
+public class InvalidPasswordException extends RuntimeException {
 
-    public InvalidPasswordException(String message) {
+    /**
+     * Constructor.
+     *
+     * @param message Message
+     */
+    public InvalidPasswordException(final String message) {
         super(message);
     }
+
 }

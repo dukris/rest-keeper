@@ -31,12 +31,20 @@ public class MailScheduler implements Scheduler {
     @Scheduled(fixedDelay = 86400000)
     public void schedule() {
         Statistics statistics = this.statisticsService.getStatistics();
-        String filename = this.builder.build("report", List.of(statistics));
+        String filename = this.builder.build(
+                "report",
+                List.of(statistics)
+        );
         UserSearchCriteria criteria = new UserSearchCriteria();
         this.userService.retrieveAllByCriteria(criteria).stream()
                 .filter(user -> user.getRole() == User.Role.ROLE_ADMIN)
-                .forEach(user -> this.mailService.send(user,
-                        "statistics.ftl", "Daily Report", filename, " "));
+                .forEach(user -> this.mailService.send(
+                        user,
+                        "statistics.ftl",
+                        "Daily Report",
+                        filename,
+                        " ")
+                );
         log.info("Daily report is sent successfully!");
         this.fileService.delete(filename);
     }

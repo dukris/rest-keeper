@@ -21,41 +21,47 @@ import java.util.function.Function;
 public class RefreshJwtManager implements JwtManager {
 
     private static Key refreshKey;
-
     private final JwtProperty jwtProperty;
 
     @PostConstruct
     private void setRefreshKey() {
-        refreshKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.jwtProperty.getRefreshKey()));
+        refreshKey = Keys.hmacShaKeyFor(
+                Decoders.BASE64.decode(this.jwtProperty.getRefreshKey())
+        );
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(final UserDetails userDetails) {
         return Jwts
                 .builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * this.jwtProperty.getRefreshExpirationTime()))
+                .setExpiration(new Date(System.currentTimeMillis()
+                        + 1000L * this.jwtProperty.getRefreshExpirationTime()))
                 .signWith(refreshKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     @Override
-    public boolean isValidToken(String token) {
+    public boolean isValidToken(final String token) {
         try {
-            return this.extractClaim(token, Claims::getExpiration).after(new Date(System.currentTimeMillis()));
+            return this.extractClaim(token, Claims::getExpiration)
+                    .after(new Date(System.currentTimeMillis()));
         } catch (Exception ignored) {
         }
         return false;
     }
 
     @Override
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(
+            final String token,
+            final Function<Claims, T> claimsResolver
+    ) {
         Claims claims = this.extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(final String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(refreshKey)

@@ -34,12 +34,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public void register(AuthEntity authEntity) {
+    public void register(final AuthEntity authEntity) {
         User user = new User();
         user.setName(authEntity.getName());
         user.setSurname(authEntity.getSurname());
         user.setEmail(authEntity.getEmail());
-        user.setPassword(this.passwordEncoder.encode(authEntity.getPassword()));
+        user.setPassword(
+                this.passwordEncoder.encode(authEntity.getPassword())
+        );
         user.setRole(authEntity.getRole());
         user.setPassport(authEntity.getPassport());
         user.setEnabled(false);
@@ -47,12 +49,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String enableJwt = this.enableJwtManager.generateToken(user);
         String subject = "Enable profile";
         String link = this.appProperty.getEnable() + enableJwt;
-        this.mailService.send(user, "registerUser.ftl", subject, " ", link);
+        this.mailService.send(
+                user,
+                "registerUser.ftl",
+                subject,
+                " ",
+                link
+        );
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AuthEntity login(AuthEntity authEntity) {
+    public AuthEntity login(final AuthEntity authEntity) {
         this.authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authEntity.getEmail(),
@@ -74,8 +82,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional(readOnly = true)
-    public AuthEntity refresh(AuthEntity authEntity) {
-        String email = this.refreshJwtManager.extractClaim(authEntity.getRefreshToken(), Claims::getSubject);
+    public AuthEntity refresh(final AuthEntity authEntity) {
+        String email = this.refreshJwtManager.extractClaim(
+                authEntity.getRefreshToken(),
+                Claims::getSubject
+        );
         User user = this.userService.retrieveByEmail(email);
         String accessJwt = this.accessJwtManager.generateToken(user);
         String refreshJwt = this.refreshJwtManager.generateToken(user);
@@ -87,8 +98,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public AuthEntity enable(String enableToken) {
-        String email = this.enableJwtManager.extractClaim(enableToken, Claims::getSubject);
+    public AuthEntity enable(final String enableToken) {
+        String email = this.enableJwtManager.extractClaim(
+                enableToken,
+                Claims::getSubject
+        );
         User user = this.userService.enable(email);
         String accessJwt = this.accessJwtManager.generateToken(user);
         String refreshJwt = this.refreshJwtManager.generateToken(user);
@@ -102,7 +116,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public AuthEntity updatePassword(Long userId, AuthEntity authEntity) {
+    public AuthEntity updatePassword(
+            final Long userId,
+            final AuthEntity authEntity
+    ) {
         User user = this.userService.retrieveById(userId);
         if (!BCrypt.checkpw(authEntity.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException("Invalid password!");

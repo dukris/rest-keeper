@@ -35,17 +35,37 @@ public class AuthController {
     private final AuthEntityMapper authEntityMapper;
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register") //name, surname, password, email, passport, role
-    public void register(@Validated(OnRegister.class) @RequestBody AuthEntityDto authEntityDto) {
+    /**
+     * Register new user.
+     *
+     * @param authEntityDto Dto
+     */
+    @PostMapping("/register")
+    public void register(@Validated(OnRegister.class)
+                         @RequestBody final AuthEntityDto authEntityDto) {
         AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
         this.authenticationService.register(authEntity);
     }
 
-    @PostMapping("/login") //email, password
-    public String login(@Validated(OnLogin.class) @RequestBody AuthEntityDto authEntityDto, HttpServletResponse response) throws JSONException {
-        AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
-        AuthEntity returnedAuthEntity = this.authenticationService.login(authEntity);
-        Cookie cookie = new Cookie("refresh", returnedAuthEntity.getRefreshToken());
+    /**
+     * Login.
+     *
+     * @param authEntityDto Dto
+     * @param response HttpServletResponse
+     * @return Token
+     */
+    @PostMapping("/login")
+    public String login(@Validated(OnLogin.class)
+                        @RequestBody final AuthEntityDto authEntityDto,
+                        final HttpServletResponse response
+    ) throws JSONException {
+        AuthEntity authEntity =
+                this.authEntityMapper.toEntity(authEntityDto);
+        AuthEntity returnedAuthEntity =
+                this.authenticationService.login(authEntity);
+        Cookie cookie = new Cookie(
+                "refresh",
+                returnedAuthEntity.getRefreshToken());
         cookie.setDomain("localhost");
         cookie.setHttpOnly(true);
         cookie.setPath("/");
@@ -54,32 +74,65 @@ public class AuthController {
         return new JSONObject()
                 .put("accessToken", returnedAuthEntity.getAccessToken())
                 .put("expTime", Timestamp.from(
-                        Instant.now().plusSeconds(returnedAuthEntity.getAccessExpTim())).getTime())
+                        Instant.now().plusSeconds(
+                                returnedAuthEntity.getAccessExpTim())
+                ).getTime())
                 .put("userId", returnedAuthEntity.getUserId())
                 .put("roleName", returnedAuthEntity.getRoleName())
                 .toString();
     }
 
-    @GetMapping("/enable") //enableToken
-    public String enable(@RequestParam String enableToken) {
-        AuthEntity returnedAuthEntity = this.authenticationService.enable(enableToken);
-        return "Dear " + returnedAuthEntity.getName() + ", your email is is confirmed successfully! "
-                + "Thank you for registration. You can close this page. Have a nice day! ";
+    /**
+     * Enable profile.
+     *
+     * @param enableToken Token
+     * @return Token
+     */
+    @GetMapping("/enable")
+    public String enable(@RequestParam final String enableToken) {
+        AuthEntity returnedAuthEntity =
+                this.authenticationService.enable(enableToken);
+        return "Dear " + returnedAuthEntity.getName()
+                + ", your email is is confirmed successfully! "
+                + "Thank you for registration. "
+                + "You can close this page. Have a nice day!";
     }
 
-    @PostMapping("/refresh") //refreshToken
-    public AuthEntityDto refresh(@Validated(OnRefresh.class) @RequestBody AuthEntityDto authEntityDto) {
-        AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
-        AuthEntity returnedAuthEntity = this.authenticationService.refresh(authEntity);
+    /**
+     * Get a new pair of tokens.
+     *
+     * @param authEntityDto Dto
+     * @return Tokens
+     */
+    @PostMapping("/refresh")
+    public AuthEntityDto refresh(@Validated(OnRefresh.class)
+                                 @RequestBody final AuthEntityDto authEntityDto
+    ) {
+        AuthEntity authEntity =
+                this.authEntityMapper.toEntity(authEntityDto);
+        AuthEntity returnedAuthEntity =
+                this.authenticationService.refresh(authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 
-    @PostMapping("/users/{userId}/password/update") //password, new password
+    /**
+     * Update password.
+     *
+     * @param authEntityDto Dto
+     * @param userId Id
+     * @return Dto
+     */
+    @PostMapping("/users/{userId}/password/update")
     @PreAuthorize("@securityExpressions.isUser(#userId)")
-    public AuthEntityDto updatePassword(@Validated(OnUpdatePassword.class) @RequestBody AuthEntityDto authEntityDto,
-                                        @PathVariable Long userId) {
-        AuthEntity authEntity = this.authEntityMapper.toEntity(authEntityDto);
-        AuthEntity returnedAuthEntity = this.authenticationService.updatePassword(userId, authEntity);
+    public AuthEntityDto updatePassword(@Validated(OnUpdatePassword.class)
+                                        @RequestBody
+                                            final AuthEntityDto authEntityDto,
+                                        @PathVariable final Long userId
+    ) {
+        AuthEntity authEntity =
+                this.authEntityMapper.toEntity(authEntityDto);
+        AuthEntity returnedAuthEntity =
+                this.authenticationService.updatePassword(userId, authEntity);
         return this.authEntityMapper.toDto(returnedAuthEntity);
     }
 

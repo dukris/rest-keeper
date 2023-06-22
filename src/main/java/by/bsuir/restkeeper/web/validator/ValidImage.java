@@ -16,10 +16,25 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {ImageFileValidator.class})
 public @interface ValidImage {
 
+    /**
+     * Get message.
+     *
+     * @return Message
+     */
     String message() default "Invalid image file!";
 
+    /**
+     * Get groups.
+     *
+     * @return Groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Get payload.
+     *
+     * @return Payload
+     */
     Class<? extends Payload>[] payload() default {};
 
 }

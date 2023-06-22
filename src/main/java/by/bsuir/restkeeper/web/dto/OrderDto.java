@@ -13,7 +13,10 @@ import java.util.Map;
 
 public record OrderDto(
 
-        @NotNull(groups = {OnUpdate.class}, message = "Id can't be blank!")
+        @NotNull(
+                groups = {OnUpdate.class},
+                message = "Id can't be blank!"
+        )
         Long id,
 
         @NotNull(message = "Number of table can't be blank!")

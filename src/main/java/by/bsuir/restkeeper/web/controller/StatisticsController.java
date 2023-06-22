@@ -29,6 +29,11 @@ public class StatisticsController {
     private final StatisticsMapper statisticsMapper;
     private final Builder builder;
 
+    /**
+     * Get statistics.
+     *
+     * @return Statistics
+     */
     @GetMapping
     @PreAuthorize("@securityExpressions.hasAdminRole()")
     public StatisticsDto get() {
@@ -36,12 +41,19 @@ public class StatisticsController {
         return this.statisticsMapper.toDto(statistics);
     }
 
+    /**
+     * Download report.
+     *
+     * @return Resource
+     */
     @GetMapping("/download")
     public ResponseEntity<Resource> download() {
         Statistics statistics = this.statisticsService.getStatistics();
         String filename = this.builder.build("report", List.of(statistics));
         ResponseEntity<Resource> response = ResponseEntity.ok()
-                .contentType(MediaType.asMediaType(MimeType.valueOf("application/vnd.ms-excel")))
+                .contentType(MediaType.asMediaType(
+                        MimeType.valueOf("application/vnd.ms-excel")
+                ))
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + filename + "\"")
                 .body(this.fileService.download(filename));

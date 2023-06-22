@@ -2,7 +2,13 @@ package by.bsuir.restkeeper.domain.exception;
 
 public class MailException extends RuntimeException {
 
-    public MailException(String message) {
+    /**
+     * Constructor.
+     *
+     * @param message Message
+     */
+    public MailException(final String message) {
         super(message);
     }
+
 }

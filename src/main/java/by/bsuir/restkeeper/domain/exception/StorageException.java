@@ -1,8 +1,14 @@
 package by.bsuir.restkeeper.domain.exception;
 
-public class StorageException extends RuntimeException{
+public class StorageException extends RuntimeException {
 
-    public StorageException(String message) {
+    /**
+     * Constructor.
+     *
+     * @param message Message
+     */
+    public StorageException(final String message) {
         super(message);
     }
+
 }

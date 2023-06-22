@@ -20,20 +20,30 @@ import java.util.List;
 public class CsvBuilder implements Builder {
 
     private static final String[] HEADER =
-            {"Daily revenue", "Monthly revenue", "Average bill",
-                    "Daily amount of guests", "Amount of guests in the morning",
-                    "Amount of guests in the evening", "The most popular dish"};
+            {"Daily revenue",
+                    "Monthly revenue",
+                    "Average bill",
+                    "Daily amount of guests",
+                    "Amount of guests in the morning",
+                    "Amount of guests in the evening",
+                    "The most popular dish"
+            };
 
     @Override
     @SneakyThrows
-    public String build(String path, List<Statistics> statistics) {
+    public String build(
+            final String path,
+            final List<Statistics> statistics
+    ) {
         String filename = this.prepareFilename(path);
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename));
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.Builder
-                     .create()
-                     .setHeader(HEADER)
-                     .build())) {
-            for (Statistics record :statistics) {
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                Paths.get(filename)
+        );
+             CSVPrinter csvPrinter = new CSVPrinter(writer,
+                     CSVFormat.Builder.create()
+                             .setHeader(HEADER)
+                             .build())) {
+            for (Statistics record : statistics) {
                 csvPrinter.printRecord(Arrays.asList(
                         record.getDailyRevenue(),
                         record.getMonthlyRevenue(),
@@ -48,7 +58,7 @@ public class CsvBuilder implements Builder {
         return filename;
     }
 
-    private String prepareFilename(String path) {
+    private String prepareFilename(final String path) {
         return path + " " + LocalDate.now() + ".csv";
     }
 

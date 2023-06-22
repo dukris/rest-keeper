@@ -29,14 +29,17 @@ public class UserServiceImpl implements UserService {
     private final AddressService addressService;
 
     @Override
-    public List<User> retrieveAllByCriteria(UserSearchCriteria criteria) {
+    public List<User> retrieveAllByCriteria(
+            final UserSearchCriteria criteria
+    ) {
         List<User> users;
         if (criteria.getSurname() != null) {
             users = this.userRepository.findBySurname(criteria.getSurname());
         } else if (criteria.getRole() != null) {
             users = this.userRepository.findByRole(criteria.getRole());
             if (criteria.getRole() == User.Role.ROLE_HALL) {
-                users.forEach(waiter -> waiter.setScore(this.calculateScore(waiter)));
+                users.forEach(waiter ->
+                        waiter.setScore(this.calculateScore(waiter)));
             }
         } else {
             users = this.userRepository.findAll();
@@ -45,9 +48,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User retrieveById(Long id) {
+    public User retrieveById(final Long id) {
         User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id = " + id + " not found!"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User with id = " + id + " not found!")
+                );
         if (user.getRole() == User.Role.ROLE_HALL) {
             user.setScore(this.calculateScore(user));
         }
@@ -55,9 +61,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User retrieveByEmail(String email) {
+    public User retrieveByEmail(final String email) {
         User user = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User with email = " + email + " not found!"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User with email = " + email + " not found!"
+                        )
+                );
         if (user.getRole() == User.Role.ROLE_HALL) {
             user.setScore(this.calculateScore(user));
         }
@@ -66,23 +76,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updatePassword(User user, String newPassword) {
+    public User updatePassword(
+            final User user,
+            final String newPassword
+    ) {
         user.setPassword(newPassword);
         return this.userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public User create(User user) {
+    public User create(final User user) {
         if (this.userRepository.existsByEmail(user.getEmail())) {
-            throw new ResourceAlreadyExistsException("User with email = " + user.getEmail() + " already exists!");
+            throw new ResourceAlreadyExistsException(
+                    "User with email = " + user.getEmail() + " already exists!"
+            );
         }
         return this.userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public User update(User user) {
+    public User update(final User user) {
         User foundUser = this.retrieveById(user.getId());
         foundUser.setName(user.getName());
         foundUser.setSurname(user.getSurname());
@@ -109,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User enable(String email) {
+    public User enable(final String email) {
         User user = this.retrieveByEmail(email);
         user.setEnabled(true);
         return this.userRepository.save(user);
@@ -117,13 +132,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(final Long id) {
         this.userRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public User addPhoto(Long id, Artifact photo) {
+    public User addPhoto(final Long id, final Artifact photo) {
         User user = this.retrieveById(id);
         String path = this.storageService.uploadPhoto(id, photo);
         user.setPhotoPath(path);
@@ -132,14 +147,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deletePhoto(Long id, String filename) {
+    public void deletePhoto(final Long id, final String filename) {
         User user = this.retrieveById(id);
         String path = this.storageService.deletePhoto(id, filename);
         user.setPhotoPath(path);
         this.userRepository.save(user);
     }
 
-    private Long calculateScore(User user) {
+    private Long calculateScore(final User user) {
         OrderSearchCriteria criteria = new OrderSearchCriteria();
         criteria.setFrom(LocalDate.now().minusDays(1));
         criteria.setTo(LocalDate.now().plusDays(1));

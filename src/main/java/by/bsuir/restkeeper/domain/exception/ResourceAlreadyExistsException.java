@@ -2,7 +2,12 @@ package by.bsuir.restkeeper.domain.exception;
 
 public class ResourceAlreadyExistsException extends RuntimeException {
 
-    public ResourceAlreadyExistsException(String message) {
+    /**
+     * Constructor.
+     *
+     * @param message Message
+     */
+    public ResourceAlreadyExistsException(final String message) {
         super(message);
     }
 
