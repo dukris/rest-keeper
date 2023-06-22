@@ -2,6 +2,8 @@
 <br>
 
 [![maven](https://github.com/hizmailovich/RestKeeper/actions/workflows/maven.yml/badge.svg)](https://github.com/hizmailovich/RestKeeper/actions/workflows/maven.yml)
+[![Hits-of-Code](https://hitsofcode.com/github/hizmailovich/rest-keeper)](https://hitsofcode.com/view/github/hizmailovich/rest-keeper)
+[![Lines-of-Code](https://tokei.rs/b1/github/hizmailovich/rest-keeper)](https://github.com/hizmailovich/rest-keeper)
 
 Project architect: [@hizmailovich](https://github.com/hizmailovich)
 
