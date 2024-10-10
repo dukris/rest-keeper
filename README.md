@@ -5,7 +5,7 @@
 [![Hits-of-Code](https://hitsofcode.com/github/hizmailovich/rest-keeper)](https://hitsofcode.com/view/github/hizmailovich/rest-keeper)
 [![Lines-of-Code](https://tokei.rs/b1/github/hizmailovich/rest-keeper)](https://github.com/hizmailovich/rest-keeper)
 
-Project architect: [@hizmailovich](https://github.com/hizmailovich)
+Project architect: [@dukris](https://github.com/dukris)
 
 Smart and elegant system for restaurants "RestKeeper" [Backend]. See frontend part [here](https://github.com/hizmailovich/rest-keeper-ui).
 
